@@ -32,6 +32,11 @@ bun run lint         # ESLint + Prettier check
 bun run format       # Auto-format with Prettier
 ```
 
+## Configuration Notes
+
+- **Vite /content alias**: Configured in vite.config.ts for robust path resolution
+- **MDsveX**: Auto-processes .md files with frontmatter, supports `<!--more-->` for excerpts
+
 ## Code Architecture
 
 ### Directory Structure
@@ -66,7 +71,7 @@ backlog/           # Task management via Backlog.md CLI
 3. **Component Imports**: Use `$lib/` alias for `src/lib/` imports
 4. **Styling**: TailwindCSS v4 classes, global styles in `app.css`
 5. **Content Management**: Markdown files with frontmatter for diary entries
-6. **MDsveX Integration**: Use built-in YAML frontmatter parsing, components render as `{@const TheComponent = entry.Component} <TheComponent />`
+6. **MDsveX Integration**: Use built-in YAML frontmatter parsing, components render as `{@const TheComponent = entry.Component} <TheComponent />`, use `<!--more-->` for auto-excerpts
 7. **Comment Style**: Prefer `//` single-line comments over `/* */` block comments
 
 ### Planned URL Structure
