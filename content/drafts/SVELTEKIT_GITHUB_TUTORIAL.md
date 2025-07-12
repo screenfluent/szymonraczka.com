@@ -240,7 +240,46 @@ git rebase -i HEAD~3
 git commit --amend -m "content: add tutorial for SvelteKit setup"
 ```
 
-⚠️ **Important**: Only use `--force-with-lease` on branches you own. Never force push to shared branches like `main` without team coordination.
+### Handling Branch Divergence
+
+**The Problem**: Sometimes your local branch and remote branch "diverge" - they have different commits that conflict with each other. This often happens when:
+- Using VS Code's "Sync Changes" button carelessly
+- Multiple people working on the same branch
+- Making commits both locally and on GitHub web interface
+
+**Visual Warning**: VS Code shows a colored line branching to the right in the Git graph when branches diverge - this is your early warning sign that histories have split!
+
+**The Error**:
+```bash
+git push
+# ! [rejected] main -> main (non-fast-forward)
+# error: failed to push some refs
+# hint: Updates were rejected because the tip of your current branch is behind
+```
+
+**The Solution**:
+```bash
+# Check the situation
+git status
+git log --oneline -5
+git log --oneline origin/main -5
+
+# Option 1: Rebase (cleaner history)
+git pull --rebase origin main
+git push
+
+# Option 2: Merge (preserves both histories)
+git pull origin main
+git push
+```
+
+**Prevention Tips**:
+- Avoid VS Code's "Sync Changes" button - use explicit `git pull` then `git push`
+- Always `git pull` before starting new work
+- Use `git status` frequently to understand your branch state
+- Stick to command line Git for better control
+
+⚠️ **Important**: Only use `--force-with-lease` on branches you own. Never force push to shared branches like `main` without team coordination. When in doubt, create a backup branch: `git branch backup-branch-name`
 
 ## Troubleshooting
 
