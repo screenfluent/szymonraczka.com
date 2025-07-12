@@ -66,7 +66,7 @@ backlog/           # Task management via Backlog.md CLI
 3. **Component Imports**: Use `$lib/` alias for `src/lib/` imports
 4. **Styling**: TailwindCSS v4 classes, global styles in `app.css`
 5. **Content Management**: Markdown files with frontmatter for diary entries
-6. **MDsveX Integration**: Use built-in YAML frontmatter parsing, components render as `<svelte:component this={entry.Component} />`
+6. **MDsveX Integration**: Use built-in YAML frontmatter parsing, components render as `{@const TheComponent = entry.Component} <TheComponent />`
 7. **Comment Style**: Prefer `//` single-line comments over `/* */` block comments
 
 ### Planned URL Structure
