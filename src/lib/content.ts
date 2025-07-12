@@ -1,11 +1,11 @@
-import type { ComponentType } from 'svelte';
+import type { Component } from 'svelte';
 
 export interface DiaryEntry {
 	slug: string;
 	title: string;
 	date: Date;
 	tags: string[];
-	Component: ComponentType; // Svelte component from mdsvex; render with <svelte:component this={entry.Component} />
+	Component: Component; // Svelte component from mdsvex; render as <TheComponent /> where TheComponent = entry.Component
 	excerpt?: string;
 	lang: 'en' | 'pl';
 	filename: string;
@@ -47,7 +47,7 @@ export function parseFilename(filename: string): { date: Date; slug: string } {
 // Create a DiaryEntry from mdsvex module
 export function createDiaryEntry(
 	filename: string,
-	module: { metadata: DiaryEntryFrontmatter; default: ComponentType },
+	module: { metadata: DiaryEntryFrontmatter; default: Component },
 	lang: 'en' | 'pl'
 ): DiaryEntry {
 	try {
@@ -103,7 +103,7 @@ export async function loadDiaryEntries(lang: 'en' | 'pl' = 'en'): Promise<DiaryE
 				// Load the module to get metadata and Component
 				const module = (await moduleLoader()) as {
 					metadata: DiaryEntryFrontmatter;
-					default: ComponentType;
+					default: Component;
 				};
 
 				const entry = createDiaryEntry(filename, module, lang);
