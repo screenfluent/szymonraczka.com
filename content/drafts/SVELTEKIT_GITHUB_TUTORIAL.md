@@ -199,6 +199,49 @@ bun add -d @sveltejs/adapter-vercel
 # import adapter from '@sveltejs/adapter-vercel';
 ```
 
+## Fixing Mistakes
+
+### Changing Commit Messages
+
+**Last commit not pushed yet** (most common case):
+```bash
+# Change the last commit message
+git commit --amend -m "content: your new message"
+
+# If you want to edit interactively
+git commit --amend
+```
+
+**Last commit already pushed**:
+```bash
+# Change the message
+git commit --amend -m "content: your new message"
+
+# Force push (⚠️ use with caution on shared branches)
+git push --force-with-lease
+```
+
+**Multiple commits back** (not pushed):
+```bash
+# Interactive rebase for last 3 commits
+git rebase -i HEAD~3
+
+# In the editor:
+# - Change 'pick' to 'reword' for commits you want to change
+# - Save and close
+# - Edit each commit message when prompted
+```
+
+**Example: Changing "docs:" to "content:"**:
+```bash
+# Before: "docs: add tutorial for SvelteKit setup"
+# After:  "content: add tutorial for SvelteKit setup"
+
+git commit --amend -m "content: add tutorial for SvelteKit setup"
+```
+
+⚠️ **Important**: Only use `--force-with-lease` on branches you own. Never force push to shared branches like `main` without team coordination.
+
 ## Troubleshooting
 
 ### Common Issues
