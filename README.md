@@ -1,38 +1,72 @@
-# sv
+# Szymon Raczka's Personal Site
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A transparent personal website built with SvelteKit, serving raw diary entries, tech resources for non-tech founders, and open metrics. Emphasizes authenticity: uncensored reflections on life/burnout/success, practical tech explanations with everyday analogies, and static pages for tools/status/story.
 
-## Creating a project
+Key sections:
+- `/diary`: Personal reflections (burnout, 165M YouTube views journey, work-from-car happiness).
+- `/tech`: Tech for non-tech founders.
+  - `/tech/howtos`: Step-by-step guides (e.g., deploy to Netlify).
+  - `/tech/glossary`: Term explanations with analogies (e.g., package.json as kitchen shopping list).
+- Static: `/uses`, `/now`, `/about` (or `/story`), `/open` (debts/incomes/shocking facts).
+- Bilingual: English default (no prefix), Polish via `/pl` (e.g., `/pl/diary/slug`).
 
-If you're seeing this, you've probably already done this step. Congrats!
+Content managed in root `/content/{lang}/{domain}/*.md` (e.g., `/content/en/diary/202507121430-burnout.md` – YYYYMMDDHHMM prefix for chronology). Frontmatter for title/date/tags.
 
-```bash
-# create a new project in the current directory
-npx sv create
+## Setup
 
-# create a new project in my-app
-npx sv create my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Clone repo and install dependencies with Bun:
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+bun install
 ```
 
-## Building
+## Develop
 
-To create a production version of your app:
+Run dev server (opens at http://localhost:5173):
 
 ```bash
-npm run build
+bun run dev
 ```
 
-You can preview the production build with `npm run preview`.
+Sync types and check:
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```bash
+bun run prepare
+bun run check
+```
+
+Format and lint:
+
+```bash
+bun run format
+bun run lint
+```
+
+## Build
+
+Build production version:
+
+```bash
+bun run build
+```
+
+Preview build locally:
+
+```bash
+bun run preview
+```
+
+## Deploy
+
+Deploys to Netlify via adapter. Push to repo with Netlify integration; site live at szymonraczka.com (after DNS setup pointing domain to your Netlify site).
+
+For manual deploy: Use Netlify CLI or drag/drop build folder.
+
+## Tech Stack
+
+- SvelteKit 2 (runes, mdsvex for markdown).
+- TailwindCSS.
+- Bun for package management.
+- Deploy: Netlify.
+
+Details in PRD.md. Questions? Edit and push – keep it lean!
