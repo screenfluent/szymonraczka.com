@@ -1,13 +1,14 @@
 ---
 title: 'Building the Content System'
 date: '2025-07-12T14:30:00'
-tags: ['personal', 'howtos']
-excerpt: 'Creating the foundation for honest diary entries - no blocks, just raw thoughts on building.'
+tags: ['devlog']
 ---
 
 # Building the Content System
 
 This is my first diary entry in the new system. Following Rick Rubin's philosophy: "This is something that I am making for myself for now."
+
+<!--more-->
 
 ## The Journey So Far
 
