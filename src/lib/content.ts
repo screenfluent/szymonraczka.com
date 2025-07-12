@@ -50,34 +50,30 @@ export function createDiaryEntry(
 	module: { metadata: DiaryEntryFrontmatter; default: Component },
 	lang: 'en' | 'pl'
 ): DiaryEntry {
-	try {
-		const { date, slug } = parseFilename(filename);
-		const { metadata, default: Component } = module;
+	const { date, slug } = parseFilename(filename);
+	const { metadata, default: Component } = module;
 
-		// Use metadata title or fallback to slug
-		const title = metadata.title || slug.replace(/-/g, ' ');
+	// Use metadata title or fallback to slug
+	const title = metadata.title || slug.replace(/-/g, ' ');
 
-		// Use metadata date or fallback to filename date
-		const entryDate = metadata.date ? new Date(metadata.date) : date;
+	// Use metadata date or fallback to filename date
+	const entryDate = metadata.date ? new Date(metadata.date) : date;
 
-		// Validate date
-		if (isNaN(entryDate.getTime())) {
-			throw new Error(`Invalid date in metadata for ${filename}`);
-		}
-
-		return {
-			slug,
-			title,
-			date: entryDate,
-			tags: metadata.tags || [],
-			Component,
-			excerpt: metadata.excerpt,
-			lang,
-			filename
-		};
-	} catch (error) {
-		throw new Error(`Failed to create diary entry from ${filename}: ${error}`);
+	// Validate date
+	if (isNaN(entryDate.getTime())) {
+		throw new Error(`Invalid date in metadata for ${filename}`);
 	}
+
+	return {
+		slug,
+		title,
+		date: entryDate,
+		tags: metadata.tags || [],
+		Component,
+		excerpt: metadata.excerpt,
+		lang,
+		filename
+	};
 }
 
 // Load diary entries from content directory using Vite's glob import
