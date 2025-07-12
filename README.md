@@ -3,6 +3,7 @@
 A transparent personal website built with SvelteKit, serving raw diary entries, tech resources for non-tech founders, and open metrics. Emphasizes authenticity: uncensored reflections on life/burnout/success, practical tech explanations with everyday analogies, and static pages for tools/status/story.
 
 Key sections:
+
 - `/diary`: Personal reflections (burnout, 165M YouTube views journey, work-from-car happiness).
 - `/tech`: Tech for non-tech founders.
   - `/tech/howtos`: Step-by-step guides (e.g., deploy to Netlify).
