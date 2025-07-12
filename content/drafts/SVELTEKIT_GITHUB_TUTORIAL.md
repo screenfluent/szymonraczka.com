@@ -54,6 +54,7 @@ clip < ~/.ssh/id_ed25519.pub
    - Click "Add SSH key"
 
 5. **Test SSH Connection**:
+
 ```bash
 ssh -T git@github.com
 # Should see: "Hi username! You've successfully authenticated..."
@@ -72,6 +73,7 @@ bunx sv create your-project-name
 ```
 
 **Configuration Options** (based on your example):
+
 - Template: `SvelteKit minimal`
 - TypeScript: `Yes, using TypeScript syntax`
 - Add-ons: `prettier, eslint, tailwindcss, sveltekit-adapter, devtools-json, mdsvex`
@@ -204,6 +206,7 @@ bun add -d @sveltejs/adapter-vercel
 ### Changing Commit Messages
 
 **Last commit not pushed yet** (most common case):
+
 ```bash
 # Change the last commit message
 git commit --amend -m "content: your new message"
@@ -213,6 +216,7 @@ git commit --amend
 ```
 
 **Last commit already pushed**:
+
 ```bash
 # Change the message
 git commit --amend -m "content: your new message"
@@ -222,6 +226,7 @@ git push --force-with-lease
 ```
 
 **Multiple commits back** (not pushed):
+
 ```bash
 # Interactive rebase for last 3 commits
 git rebase -i HEAD~3
@@ -233,6 +238,7 @@ git rebase -i HEAD~3
 ```
 
 **Example: Changing "docs:" to "content:"**:
+
 ```bash
 # Before: "docs: add tutorial for SvelteKit setup"
 # After:  "content: add tutorial for SvelteKit setup"
@@ -243,6 +249,7 @@ git commit --amend -m "content: add tutorial for SvelteKit setup"
 ### Handling Branch Divergence
 
 **The Problem**: Sometimes your local branch and remote branch "diverge" - they have different commits that conflict with each other. This often happens when:
+
 - Using VS Code's "Sync Changes" button carelessly
 - Multiple people working on the same branch
 - Making commits both locally and on GitHub web interface
@@ -250,6 +257,7 @@ git commit --amend -m "content: add tutorial for SvelteKit setup"
 **Visual Warning**: VS Code shows a colored line branching to the right in the Git graph when branches diverge - this is your early warning sign that histories have split!
 
 **The Error**:
+
 ```bash
 git push
 # ! [rejected] main -> main (non-fast-forward)
@@ -258,6 +266,7 @@ git push
 ```
 
 **The Solution**:
+
 ```bash
 # Check the situation
 git status
@@ -274,6 +283,7 @@ git push
 ```
 
 **Prevention Tips**:
+
 - Avoid VS Code's "Sync Changes" button - use explicit `git pull` then `git push`
 - Always `git pull` before starting new work
 - Use `git status` frequently to understand your branch state
@@ -286,14 +296,17 @@ git push
 ### Common Issues
 
 **Permission denied (publickey)**:
+
 - Verify SSH key is added to GitHub
 - Test with `ssh -T git@github.com`
 
 **Branch 'main' doesn't exist**:
+
 - Check current branch: `git branch`
 - Rename if needed: `git branch -M main`
 
 **HTTPS vs SSH**:
+
 - Always use SSH for easier authentication
 - Format: `git@github.com:username/repo.git`
 

@@ -1,12 +1,13 @@
 {
-	"permissions": {
-		"allow": [
-			"Bash(find:*)",
-			"Bash(ls:*)",
-			"Bash(backlog task create:*)",
-			"Bash(backlog task list:*)",
-			"Bash(mkdir:*)"
-		],
-		"deny": []
-	}
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(backlog task create:*)",
+      "Bash(backlog task list:*)",
+      "Bash(mkdir:*)",
+      "Bash(bun run:*)"
+    ],
+    "deny": []
+  }
 }

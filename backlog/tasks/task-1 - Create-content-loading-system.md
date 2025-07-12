@@ -19,3 +19,7 @@ Build utilities to load and parse markdown files with frontmatter from /content 
 - [ ] Frontmatter parsing extracts title/date/tags
 - [ ] System handles YYYYMMDDHHMM filename prefixes
 - [ ] Error handling for missing or malformed files
+
+## Implementation Plan
+
+1. Create content loading utilities in src/lib/content.ts\n2. Implement markdown file discovery using Vite's glob imports\n3. Add frontmatter parsing for title, date, tags\n4. Create filename parsing for YYYYMMDDHHMM prefixes\n5. Add error handling and TypeScript types\n6. Test with sample content files
