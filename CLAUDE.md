@@ -1,3 +1,81 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+This is Szymon Raczka's personal blog/website built with SvelteKit 2, featuring transparent diary entries and tech resources for non-tech founders. The project follows a diary-focused content structure inspired by Rick Rubin's philosophy of honest, personal reflections.
+
+## Tech Stack
+
+- **Framework**: SvelteKit 2.22.0 with Svelte 5 (using runes syntax)
+- **Styling**: TailwindCSS v4 (via @tailwindcss/vite)
+- **Build Tool**: Vite 7
+- **Package Manager**: Bun
+- **Markdown**: MDsveX for .svx files
+- **Deployment**: Netlify (adapter-netlify)
+- **TypeScript**: Strict mode enabled
+
+## Common Development Commands
+
+```bash
+# Development
+bun run dev          # Start dev server at http://localhost:5173
+bun run preview      # Preview production build
+
+# Build
+bun run build        # Build for production
+
+# Code Quality - ALWAYS RUN BEFORE MARKING TASKS AS DONE
+bun run check        # Type checking with svelte-check
+bun run lint         # ESLint + Prettier check
+bun run format       # Auto-format with Prettier
+```
+
+## Code Architecture
+
+### Directory Structure
+```
+src/
+├── routes/          # File-based routing (SvelteKit convention)
+│   ├── +layout.svelte
+│   └── +page.svelte
+├── lib/            # Reusable utilities ($lib alias)
+├── app.css         # Global styles (imports TailwindCSS)
+├── app.html        # HTML template
+└── app.d.ts        # TypeScript definitions
+
+content/            # Markdown content (planned structure)
+├── en/            # English content
+│   └── diary/     # Diary entries: YYYYMMDDHHMM-slug.md
+└── pl/            # Polish content
+    └── diary/     # Polish diary entries
+
+backlog/           # Task management via Backlog.md CLI
+├── tasks/         # Active tasks
+├── drafts/        # Draft tasks  
+├── docs/          # Project documentation
+└── decisions/     # Architecture decisions
+```
+
+### Key Development Patterns
+
+1. **Svelte 5 Runes**: Use new syntax like `$props()` and `$state()`
+2. **File-based Routing**: Pages in `src/routes/` auto-generate routes
+3. **Component Imports**: Use `$lib/` alias for `src/lib/` imports
+4. **Styling**: TailwindCSS v4 classes, global styles in `app.css`
+5. **Content Management**: Markdown files with frontmatter for diary entries
+
+### Planned URL Structure
+- English (default): `/diary/slug`, `/about`, `/uses`, `/now`, `/open`
+- Polish: `/pl/diary/slug`, `/pl/about`, etc.
+
+## Testing
+
+Currently, no testing framework is configured. When implementing tests:
+- Consider Vitest for unit/integration tests (works well with SvelteKit)
+- Consider Playwright for e2e tests
+- Add test commands to package.json before implementation
 
 <!-- BACKLOG.MD GUIDELINES START -->
 # Instructions for the usage of Backlog.md CLI Tool
@@ -186,3 +264,9 @@ A task is **Done** only when **ALL** of the following are complete:
 - When users mention to create a task, they mean to create a task using Backlog.md CLI tool.
 
 <!-- BACKLOG.MD GUIDELINES END -->
+
+# important-instruction-reminders
+Do what has been asked; nothing more, nothing less.
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
