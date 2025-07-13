@@ -65,7 +65,7 @@ Organized by domain for clarity. All dynamic content (entries) sourced from root
 
 ### 2.3 Global Features
 
-- **Navigation**: Simple header/footer with links to /diary (and tag filters, e.g., /diary?tag=howtos if needed) and static pages.
+- **Navigation**: Simple header/footer with links to /diary (and tag filters via clean URLs, e.g., /howtos) and static pages.
 - **Bilingual Handling**:
   - **English (Primary)**: Main version with clean URLs (no language prefix)
     - Examples: `/diary/slug`, `/about`, `/uses`, `/now`, `/open`
