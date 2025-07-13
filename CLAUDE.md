@@ -35,6 +35,7 @@ bun run format       # Auto-format with Prettier
 ## Configuration Notes
 
 - **Vite /content alias**: Configured in vite.config.ts for robust path resolution
+- **Vite dev server**: `server.fs.allow: ['.']` enables serving content files during development
 - **MDsveX**: Auto-processes .md files with frontmatter, supports `<!--more-->` for excerpts
 
 ## Code Architecture
