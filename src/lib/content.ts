@@ -18,6 +18,12 @@ export interface DiaryEntryFrontmatter {
 	excerpt?: string;
 }
 
+// Define the structure of an eagerly loaded module
+type EagerModule = {
+	metadata: DiaryEntryFrontmatter;
+	default: Component;
+};
+
 // Parse filename to extract date and slug from YYYYMMDDHHMM-slug.md format
 export function parseFilename(filename: string): { date: Date; slug: string } {
 	const match = filename.match(/^(\d{12})-(.+)\.md$/);
@@ -76,91 +82,73 @@ export function createDiaryEntry(
 	};
 }
 
-// Load diary entries from content directory using Vite's glob import
-// This works with Vite's static analysis and will be bundled at build time
-export async function loadDiaryEntries(lang: 'en' | 'pl' = 'en'): Promise<DiaryEntry[]> {
-	const entries: DiaryEntry[] = [];
+// Load all modules eagerly (synchronously) at module initialization time
+const modules = import.meta.glob<EagerModule>('/content/*/diary/*.md', { eager: true });
 
-	try {
-		// Use Vite's glob import to load all markdown files (mdsvex processes them)
-		const modules = import.meta.glob('/content/*/diary/*.md', { eager: false });
-
-		for (const [path, moduleLoader] of Object.entries(modules)) {
-			// Extract language and filename from path
-			const pathMatch = path.match(/\/content\/(\w+)\/diary\/(.+)$/);
-			if (!pathMatch) continue;
-
-			const [, pathLang, filename] = pathMatch;
-
-			// Skip if language doesn't match
-			if (pathLang !== lang) continue;
-
-			try {
-				// Load the module to get metadata and Component
-				const module = (await moduleLoader()) as {
-					metadata: DiaryEntryFrontmatter;
-					default: Component;
-				};
-
-				const entry = createDiaryEntry(filename, module, lang);
-				entries.push(entry);
-			} catch (error) {
-				console.warn(`Failed to load diary entry ${filename}:`, error);
-				// Continue processing other files
-			}
+// Process all entries immediately when this module is imported
+const allEntries: DiaryEntry[] = Object.entries(modules)
+	.map(([path, module]) => {
+		// Extract language and filename from path
+		const pathMatch = path.match(/\/content\/(\w+)\/diary\/(.+)$/);
+		if (!pathMatch) {
+			console.warn(`Skipping invalid path: ${path}`);
+			return null;
 		}
 
-		// Sort by date (newest first)
-		entries.sort((a, b) => b.date.getTime() - a.date.getTime());
+		// Cast lang to supported languages
+		const [, lang, filename] = pathMatch as [string, 'en' | 'pl', string];
 
-		return entries;
-	} catch (error) {
-		console.error('Failed to load diary entries:', error);
-		return [];
-	}
+		try {
+			return createDiaryEntry(filename, module, lang);
+		} catch (error) {
+			console.warn(`Failed to process diary entry ${filename}:`, error);
+			return null;
+		}
+	})
+	// Filter out any null entries (failed processing)
+	.filter((entry): entry is DiaryEntry => entry !== null)
+	// Sort by date (newest first)
+	.sort((a, b) => b.date.getTime() - a.date.getTime());
+
+/**
+ * Loads diary entries synchronously from the pre-processed list.
+ */
+export function loadDiaryEntries(lang: 'en' | 'pl' = 'en'): DiaryEntry[] {
+	return allEntries.filter(entry => entry.lang === lang);
 }
 
-// Load a single diary entry by slug and language
-export async function loadDiaryEntry(
+/**
+ * Loads a single diary entry synchronously.
+ */
+export function loadDiaryEntry(
 	slug: string,
 	lang: 'en' | 'pl' = 'en'
-): Promise<DiaryEntry | null> {
-	try {
-		const entries = await loadDiaryEntries(lang);
-		return entries.find((entry) => entry.slug === slug) || null;
-	} catch (error) {
-		console.error(`Failed to load diary entry ${slug}:`, error);
-		return null;
-	}
+): DiaryEntry | null {
+	const entries = loadDiaryEntries(lang);
+	return entries.find((entry) => entry.slug === slug) || null;
 }
 
-// Get diary entries filtered by tags
-export async function getDiaryEntriesByTag(
+/**
+ * Gets filtered diary entries synchronously.
+ */
+export function getDiaryEntriesByTag(
 	tag: string,
 	lang: 'en' | 'pl' = 'en'
-): Promise<DiaryEntry[]> {
-	try {
-		const entries = await loadDiaryEntries(lang);
-		return entries.filter((entry) => entry.tags.includes(tag));
-	} catch (error) {
-		console.error(`Failed to get diary entries by tag ${tag}:`, error);
-		return [];
-	}
+): DiaryEntry[] {
+	const entries = loadDiaryEntries(lang);
+	return entries.filter((entry) => entry.tags.includes(tag));
 }
 
-// Get all unique tags from diary entries
-export async function getAllTags(lang: 'en' | 'pl' = 'en'): Promise<string[]> {
-	try {
-		const entries = await loadDiaryEntries(lang);
-		const tagSet = new Set<string>();
+/**
+ * Gets all unique tags synchronously.
+ */
+export function getAllTags(lang: 'en' | 'pl' = 'en'): string[] {
+	const entries = loadDiaryEntries(lang);
+	const tagSet = new Set<string>();
 
-		entries.forEach((entry) => {
-			entry.tags.forEach((tag) => tagSet.add(tag));
-		});
+	entries.forEach((entry) => {
+		entry.tags.forEach((tag) => tagSet.add(tag));
+	});
 
-		return Array.from(tagSet).sort();
-	} catch (error) {
-		console.error('Failed to get all tags:', error);
-		return [];
-	}
+	return Array.from(tagSet).sort();
 }
