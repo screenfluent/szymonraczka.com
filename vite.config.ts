@@ -10,5 +10,12 @@ export default defineConfig({
 		alias: {
 			'/content': resolve(process.cwd(), 'content')
 		}
+	},
+	// Add this server configuration
+	server: {
+		fs: {
+			// Allow serving files from the project root
+			allow: ['.']
+		}
 	}
 });
