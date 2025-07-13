@@ -62,7 +62,7 @@ backlog/           # Task management via Backlog.md CLI
 ├── tasks/         # Active tasks
 ├── drafts/        # Draft tasks
 ├── docs/          # Project documentation
-└── decisions/     # Architecture decisions
+└── decisions/     # Architecture decisions (ADRs documenting technical choices)
 ```
 
 ### Key Development Patterns

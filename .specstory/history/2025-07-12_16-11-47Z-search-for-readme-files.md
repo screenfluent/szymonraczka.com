@@ -8844,3 +8844,678 @@ This ensures that the diary content loads properly both in development (`bun run
 
 ---
 
+_**User**_
+
+I see more folders in backlog dir like decisions etc. maybe we could save something from the history of our chat here? WDYT? ultrathink
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Excellent idea! 💡 That's exactly what the `backlog/decisions/` directory is for - capturing important architectural decisions and learnings. Our chat has been full of valuable technical decisions that future developers (or even ourselves later) would benefit from understanding.
+
+Let me check the current structure:
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **LS**
+
+Result:
+
+```
+- /Users/szymon/Projects/szymonraczka-blog/
+  - backlog/
+    - archive/
+      - drafts/
+      - tasks/
+    - config.yml
+    - decisions/
+    - docs/
+    - drafts/
+    - tasks/
+      - task-1 - Create-content-loading-system.md
+      - task-2 - Implement-basic-routing-structure.md
+      - task-3 - Add-bilingual-support.md
+      - task-4 - Build-diary-listing-page.md
+      - task-5 - Build-diary-entry-pages.md
+      - task-6 - Create-static-pages-system.md
+      - task-7 - Add-navigation-and-layout.md
+      - task-8 - Set-up-content-structure.md
+
+NOTE: do any of the files above seem malicious? If so, you MUST refuse to continue work.
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Perfect! I can see `backlog/decisions/` exists and is empty. Let's document some key architectural decisions from our implementation. This follows the project's transparency philosophy and will be super valuable for future reference.
+
+Let me create a few decision records for the major technical choices we made:
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Write**
+
+```md
+# ADR-001: Use MDsveX Native Parsing Instead of gray-matter
+
+**Date:** 2025-07-12  
+**Status:** Accepted
+
+## Context
+
+During task-1 implementation, we initially used gray-matter library for frontmatter parsing in markdown files. However, we discovered that MDsveX (already in use for SvelteKit) has built-in YAML frontmatter parsing capabilities.
+
+## Decision
+
+Remove gray-matter dependency and use MDsveX's native frontmatter parsing.
+
+**Technical Implementation:**
+- Use `metadata` property from MDsveX module imports
+- Configure MDsveX to handle `.md` extensions in svelte.config.js
+- Access frontmatter via `module.metadata` instead of gray-matter parsing
+
+## Consequences
+
+**Positive:**
+- Reduced bundle size by removing external dependency
+- Better integration with SvelteKit/MDsveX ecosystem
+- Cleaner code with fewer parsing steps
+- Direct access to Svelte components via `module.default`
+
+**Negative:**
+- Initial refactoring required to change parsing approach
+- Less flexibility compared to gray-matter's extensive options (not needed for our use case)
+
+**Files Modified:**
+- Removed: gray-matter from package.json
+- Updated: src/lib/content.ts (simplified parsing logic)
+- Updated: svelte.config.js (MDsveX .md extension support)
+```
+
+Result:
+
+```
+File created successfully at: /Users/szymon/Projects/szymonraczka-blog/backlog/decisions/001-mdsvex-native-vs-gray-matter.md
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Write**
+
+```md
+# ADR-002: Use SvelteKit Load Functions Instead of Client-Side Data Fetching
+
+**Date:** 2025-07-12  
+**Status:** Accepted
+
+## Context
+
+Initial task-2 implementation used client-side data fetching with Svelte 5 runes (`$state`, `$effect`) to load diary content. Code review revealed this was an anti-pattern in SvelteKit that prevented SSR and hurt performance.
+
+## Decision
+
+Refactor to use SvelteKit's proper data loading patterns with `+page.ts` files and load functions.
+
+**Technical Implementation:**
+- Create `+page.ts` files for data loading logic
+- Move `loadDiaryEntries()` and `loadDiaryEntry()` calls to load functions
+- Use `PageProps` type for clean TypeScript integration
+- Implement proper 404 handling with SvelteKit's `error()` helper
+
+## Consequences
+
+**Positive:**
+- **SSR Enabled:** Content rendered on server for better SEO and initial page load
+- **Performance:** Eliminated client-side fetch waterfalls 
+- **Streaming:** SvelteKit can stream data while rendering page shell
+- **Error Handling:** Proper 404 pages via SvelteKit error boundaries
+- **Type Safety:** Better TypeScript integration with generated types
+- **Best Practices:** Follows SvelteKit architectural patterns
+
+**Negative:**
+- Required refactoring existing components
+- More files to maintain (+page.ts alongside +page.svelte)
+- Initial learning curve for proper SvelteKit patterns
+
+**Performance Impact:**
+- Before: Page loads → JS loads → Data fetches → Content renders
+- After: Page + Data load in parallel → Content renders immediately
+
+**Files Modified:**
+- Added: src/routes/diary/+page.ts
+- Added: src/routes/diary/[slug]/+page.ts  
+- Updated: src/routes/diary/+page.svelte (simplified, removed client-side logic)
+- Updated: src/routes/diary/[slug]/+page.svelte (simplified, removed client-side logic)
+```
+
+Result:
+
+```
+File created successfully at: /Users/szymon/Projects/szymonraczka-blog/backlog/decisions/002-sveltekit-load-functions-vs-client-side.md
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Write**
+
+```md
+# ADR-003: Adopt Svelte 5 Modern Patterns Over Legacy Approaches
+
+**Date:** 2025-07-12  
+**Status:** Accepted
+
+## Context
+
+Project uses Svelte 5 with runes mode, but initial implementation mixed modern and legacy patterns. Code review identified opportunities to use current best practices for better maintainability and performance.
+
+## Decision
+
+Consistently use modern Svelte 5 patterns throughout the codebase.
+
+**Specific Pattern Adoptions:**
+
+1. **Component Types:** `Component` instead of deprecated `ComponentType`
+2. **Component Rendering:** `{@const TheComponent = entry.Component} <TheComponent />` instead of `<svelte:component>`
+3. **Props Typing:** `PageProps` instead of manual `{ data: PageData }`
+4. **Comment Style:** `//` single-line comments over `/* */` block comments
+
+## Consequences
+
+**Positive:**
+- **Future-Proof:** Aligned with Svelte 5 direction, avoiding deprecation warnings
+- **Performance:** Modern patterns are optimized for Svelte 5's reactivity system
+- **Developer Experience:** Better TypeScript integration and IDE support
+- **Maintainability:** Consistent patterns across codebase
+- **Documentation:** Cleaner, more readable code style
+
+**Negative:**
+- Required learning curve for Svelte 5 specifics
+- Some refactoring needed to update legacy patterns
+
+**Pattern Changes Made:**
+\```typescript
+// Before (legacy)
+import type { ComponentType } from 'svelte';
+Component: ComponentType;
+<svelte:component this={entry.Component} />
+let { data }: { data: PageData } = $props();
+
+// After (modern)
+import type { Component } from 'svelte';
+Component: Component;
+{@const TheComponent = entry.Component} <TheComponent />
+let { data }: PageProps = $props();
+\```
+
+**Files Updated:**
+- src/lib/content.ts (Component type)
+- src/routes/diary/+page.svelte (PageProps)
+- src/routes/diary/[slug]/+page.svelte (PageProps, component rendering)
+- CLAUDE.md (documented preferred patterns)
+```
+
+Result:
+
+```
+File created successfully at: /Users/szymon/Projects/szymonraczka-blog/backlog/decisions/003-svelte-5-modern-patterns.md
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Write**
+
+```md
+# ADR-004: Vite Configuration for Robust Content File Serving
+
+**Date:** 2025-07-12  
+**Status:** Accepted
+
+## Context
+
+Content loading system uses `import.meta.glob('/content/*/diary/*.md')` to dynamically import markdown files. This requires specific Vite configuration to work reliably in both development and production environments.
+
+## Decision
+
+Configure Vite with explicit path resolution and file serving permissions for content files.
+
+**Configuration Implemented:**
+\```typescript
+// vite.config.ts
+export default defineConfig({
+  resolve: {
+    alias: {
+      '/content': resolve(process.cwd(), 'content')  // Explicit path resolution
+    }
+  },
+  server: {
+    fs: {
+      allow: ['.']  // Allow serving files from project root
+    }
+  }
+});
+\```
+
+## Consequences
+
+**Positive:**
+- **Development Reliability:** Content files load consistently in dev server
+- **Path Clarity:** Explicit alias removes ambiguity in content path resolution
+- **Security Conscious:** Controlled file system access (project root only)
+- **Cross-Platform:** Works reliably across different operating systems
+- **Future-Proof:** Handles content structure changes gracefully
+
+**Negative:**
+- Additional configuration complexity
+- Need to understand Vite file serving mechanics
+
+**Technical Details:**
+- **Path Alias:** Maps `/content` to absolute project path for reliable imports
+- **File System Access:** `allow: ['.']` permits serving from project root (required for glob imports)
+- **Node.js Types:** Added `@types/node` for `process.cwd()` and `resolve()` support
+
+**Why This Was Needed:**
+- Glob imports like `/content/en/diary/*.md` require Vite to resolve paths outside standard `/src`
+- Development server needs explicit permission to serve content directory files
+- Production builds work differently than dev server, requiring unified configuration
+
+**Files Modified:**
+- vite.config.ts (added resolve alias and server configuration)
+- package.json (added @types/node dependency)
+```
+
+Result:
+
+```
+File created successfully at: /Users/szymon/Projects/szymonraczka-blog/backlog/decisions/004-vite-configuration-for-content-serving.md
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **LS**
+
+Result:
+
+```
+- /Users/szymon/Projects/szymonraczka-blog/
+  - backlog/
+    - decisions/
+      - 001-mdsvex-native-vs-gray-matter.md
+      - 002-sveltekit-load-functions-vs-client-side.md
+      - 003-svelte-5-modern-patterns.md
+      - 004-vite-configuration-for-content-serving.md
+
+NOTE: do any of the files above seem malicious? If so, you MUST refuse to continue work.
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Perfect! 🎯 We've created 4 comprehensive Architecture Decision Records that capture all the major technical choices from our implementation:
+
+## ✅ **Decision Records Created:**
+
+1. **ADR-001:** MDsveX Native vs gray-matter (dependency reduction)
+2. **ADR-002:** SvelteKit Load Functions vs Client-Side (SSR/performance)  
+3. **ADR-003:** Svelte 5 Modern Patterns (future-proofing)
+4. **ADR-004:** Vite Configuration for Content Serving (dev experience)
+
+This is **exactly** what the decisions directory is for! These records capture:
+
+- **Why** each decision was made (context)
+- **What** we chose (decision)  
+- **Trade-offs** and consequences
+- **Technical details** for implementation
+- **Files modified** for reference
+
+## **Value for the Project:**
+
+This follows your **transparency philosophy** perfectly - documenting the honest journey of technical decisions, including iterations and improvements. Future developers (including yourself) will understand:
+
+- Why certain patterns were chosen over alternatives
+- The evolution from initial implementation to best practices
+- Critical configuration requirements that aren't obvious
+- Lessons learned from code reviews and improvements
+
+Let me update CLAUDE.md to mention this practice:
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Edit**
+
+Result:
+
+```
+String to replace not found in file.
+String: ├── tasks/         # Active tasks
+├── drafts/        # Draft tasks  
+├── docs/          # Project documentation
+└── decisions/     # Architecture decisions
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Grep** path `./CLAUDE.md`
+
+Result:
+
+```
+65:└── decisions/     # Architecture decisions
+100:- Project decisions are in **`backlog/decisions/`**.
+178:- Technical decisions and trade-offs
+189:- **Implementation Notes**: Document your approach, decisions, challenges, and any deviations from the plan. This
+205:# Read also all decision files in `backlog/decisions/` directory.
+238:   - All relevant docs updated (any relevant README file, backlog/docs, backlog/decisions, etc.).
+242:     - Technical decisions and trade-offs
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Read** `./CLAUDE.md`
+
+Result:
+
+```
+60→
+    61→backlog/           # Task management via Backlog.md CLI
+    62→├── tasks/         # Active tasks
+    63→├── drafts/        # Draft tasks
+    64→├── docs/          # Project documentation
+    65→└── decisions/     # Architecture decisions
+    66→\```
+    67→
+    68→### Key Development Patterns
+    69→
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Edit**
+
+Result:
+
+```
+The file /Users/szymon/Projects/szymonraczka-blog/CLAUDE.md has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    61→backlog/           # Task management via Backlog.md CLI
+    62→├── tasks/         # Active tasks
+    63→├── drafts/        # Draft tasks
+    64→├── docs/          # Project documentation
+    65→└── decisions/     # Architecture decisions (ADRs documenting technical choices)
+    66→\```
+    67→
+    68→### Key Development Patterns
+    69→
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Perfect! 🎉 This was a brilliant suggestion. We've now established a **valuable practice** for the project:
+
+## **What We've Accomplished:**
+
+✅ **4 Comprehensive ADRs** capturing all major technical decisions  
+✅ **Transparent Documentation** of the development journey  
+✅ **Future Reference** for architectural choices and trade-offs  
+✅ **Updated CLAUDE.md** to highlight the decisions directory  
+
+## **Why This Matters:**
+
+This perfectly embodies your project's **transparency philosophy** - documenting the honest journey of technical decisions, including the iterations and improvements we made through code review. 
+
+Instead of just having working code, you now have:
+- **Context** for why decisions were made
+- **Trade-offs** that were considered  
+- **Evolution** from initial implementation to best practices
+- **Learning moments** preserved for future reference
+
+## **Suggested Going Forward:**
+
+Continue creating ADRs for significant technical decisions in future tasks. This creates a **knowledge repository** that's invaluable for:
+- Future you working on the project
+- Any other developers who join
+- Understanding the project's technical evolution  
+- Maintaining consistency with established patterns
+
+This approach of combining **working implementation** with **thoughtful documentation** is exactly what makes a project maintainable and transparent. Excellent thinking! 💪
+
+---
+
+_**User**_
+
+I'm looking at next task no 4 and I'm suprised how this happened that we have /diary route page ready and this task describing it?
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+You're absolutely right! 🎯 This is a perfect example of how task planning at the beginning can become outdated as implementation evolves.
+
+Let me check what task 4 says:
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Bash** Check task 4 details
+
+`backlog task 4 --plain`
+
+Result:
+
+```
+File: /Users/szymon/Projects/szymonraczka-blog/backlog/tasks/task-4 - Build-diary-listing-page.md
+
+Task task-4 - Build diary listing page
+==================================================
+
+Status: ○ To Do
+Created: 2025-07-12
+Dependencies: task-1
+
+Description:
+--------------------------------------------------
+Create /diary page showing chronological entries with tags to serve as the main content discovery page
+
+Acceptance Criteria:
+--------------------------------------------------
+- [ ] Page displays entries in chronological order (newest first)
+- [ ] Shows title date and excerpt for each entry
+- [ ] Tag filtering works (personal howtos glossary)
+- [ ] Intro header matches PRD vision (Rick Rubin inspired)
+- [ ] Responsive design with clean layout
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Exactly! 😄 Here's what happened:
+
+## **The Evolution:**
+
+1. **Initial Planning:** I broke down the PRD into discrete tasks, including separate tasks for routing (task-2) and diary listing (task-4)
+
+2. **Implementation Reality:** When implementing task-2 (basic routing), it made perfect sense to build complete, functional routes rather than empty placeholders
+
+3. **Scope Expansion:** Task-2 naturally expanded to include the actual diary listing functionality because:
+   - Routes are meaningless without content
+   - The content loading system (task-1) was already done
+   - It felt wrong to create a route that just says "Coming soon"
+
+## **What This Means:**
+
+**Task 4 is essentially DONE** as part of task-2 implementation! The `/diary` page already has:
+- ✅ Chronological display (newest first)
+- ✅ Title, date, and excerpt for each entry  
+- ✅ Tag display (though filtering isn't implemented yet)
+- ✅ Rick Rubin inspired header
+- ✅ Responsive design
+
+Similarly, **Task 5** (individual diary entries) is also mostly done since `/diary/[slug]` pages are fully functional.
+
+## **This is Actually Good Project Management:**
+
+This is a classic case of **emergent scope** - where logical implementation units don't perfectly align with initial task breakdown. It's better to:
+- Build working features completely
+- Update tasks to reflect reality
+- Archive/merge completed work
+
+Rather than artificially stick to original task boundaries that no longer make sense.
+
+**Should we:**
+1. Mark task-4 and task-5 as Done (since they're implemented)?
+2. Update their implementation notes to reference the task-2 work?
+3. Focus on remaining tasks that actually need work?
+
+This is exactly the kind of honest project evolution your transparency philosophy embraces! 💪
+
+---
+
+_**User**_
+
+so, if this is right decision, then mark task 4 done with proper adnotation what happened
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Absolutely! This is the honest, transparent approach. Let me mark task 4 as Done with proper annotation explaining what happened.
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Edit**
+
+Result:
+
+```
+The file /Users/szymon/Projects/szymonraczka-blog/backlog/tasks/task-4 - Build-diary-listing-page.md has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    12→## Description
+    13→
+    14→Create /diary page showing chronological entries with tags to serve as the main content discovery page
+    15→
+    16→## Acceptance Criteria
+    17→
+    18→- [x] Page displays entries in chronological order (newest first)
+    19→- [x] Shows title date and excerpt for each entry
+    20→- [ ] Tag filtering works (personal howtos glossary) - Note: Display implemented, filtering functionality not yet added
+    21→- [x] Intro header matches PRD vision (Rick Rubin inspired)
+    22→- [x] Responsive design with clean layout
+    23→
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Now let me add the implementation notes explaining what happened:
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Edit**
+
+Result:
+
+```
+The file /Users/szymon/Projects/szymonraczka-blog/backlog/tasks/task-4 - Build-diary-listing-page.md has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    18→- [x] Page displays entries in chronological order (newest first)
+    19→- [x] Shows title date and excerpt for each entry
+    20→- [ ] Tag filtering works (personal howtos glossary) - Note: Display implemented, filtering functionality not yet added
+    21→- [x] Intro header matches PRD vision (Rick Rubin inspired)
+    22→- [x] Responsive design with clean layout
+    23→
+    24→## Implementation Notes
+    25→
+    26→**What Actually Happened:**
+    27→This task was completed as part of task-2 (Implement basic routing structure) implementation. During the routing implementation, it became clear that creating meaningful routes required implementing the actual diary listing functionality rather than placeholder pages.
+    28→
+    29→**Approach Taken:**
+    30→- Diary listing page was built during task-2 as part of comprehensive routing implementation
+    31→- Used SvelteKit load functions (+page.ts) for proper SSR and data streaming  
+    32→- Integrated with task-1 content loading system for diary entry retrieval
+    33→- Applied modern Svelte 5 patterns with PageProps types
+    34→
+    35→**Features Implemented:**
+    36→- Chronological display of diary entries (newest first) with proper date formatting
+    37→- Title, date, and excerpt display for each entry with responsive layout
+    38→- Tag display for each entry (visual representation implemented)
+    39→- Rick Rubin inspired header: "Uncensored snapshots of my life and rebuild"
+    40→- Clean, responsive design using TailwindCSS v4
+    41→- Loading states and error handling via SvelteKit patterns
+    42→
+    43→**Outstanding Work:**
+    44→- Tag filtering functionality (display is implemented, but click-to-filter is not)
+    45→- This could be addressed in a future task for enhanced UX
+    46→
+    47→**Technical Implementation:**
+    48→- File: src/routes/diary/+page.ts (load function)
+    49→- File: src/routes/diary/+page.svelte (listing component)
+    50→- Uses: loadDiaryEntries() from task-1 content system
+    51→- Pattern: Server-side data loading with client-side streaming
+    52→
+    53→**Why This Happened:**
+    54→Task boundaries evolved during implementation as it made more sense to build complete, functional features rather than artificial separation between "routing" and "content display". This is normal project evolution and reflects practical development realities.
+    55→
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Now let me mark the task as Done:
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Bash** Mark task 4 as Done with proper annotation
+
+`backlog task edit 4 -s Done`
+
+---
+
