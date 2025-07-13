@@ -9517,5 +9517,440 @@ Tool use: **Bash** Mark task 4 as Done with proper annotation
 
 `backlog task edit 4 -s Done`
 
+Result:
+
+```
+The user doesn't want to proceed with this tool use. The tool use was rejected (eg. if it was a file edit, the new_string was NOT written to the file). STOP what you are doing and wait for the user to tell you how to proceed.
+```
+
+_**User**_
+
+[Request interrupted by user for tool use]
+
+---
+
+_**User**_
+
+ahh I see there is something to do, to mark this task as 100% done. so proceed with making what it says
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+You're absolutely right! I see that tag filtering functionality is the missing piece. The task shows:
+
+- [ ] Tag filtering works (personal howtos glossary) - Note: Display implemented, filtering functionality not yet added
+
+Let me implement the tag filtering functionality to complete task 4 properly. This means adding the ability to click on tags to filter the diary entries.
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Edit**
+
+Result:
+
+```
+The file /Users/szymon/Projects/szymonraczka-blog/src/routes/diary/+page.ts has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+     1→import { loadDiaryEntries, getDiaryEntriesByTag, getAllTags } from '$lib/content';
+     2→import type { PageLoad } from './$types';
+     3→
+     4→export const load: PageLoad = async ({ url }) => {
+     5→	const tag = url.searchParams.get('tag');
+     6→	
+     7→	// If tag filter is specified, get filtered entries
+     8→	if (tag) {
+     9→		return {
+    10→			entries: getDiaryEntriesByTag(tag, 'en'),
+    11→			allTags: getAllTags('en'),
+    12→			selectedTag: tag
+    13→		};
+    14→	}
+    15→	
+    16→	// Otherwise get all entries
+    17→	return {
+    18→		entries: loadDiaryEntries('en'),
+    19→		allTags: getAllTags('en'),
+    20→		selectedTag: null
+    21→	};
+    22→};
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Now let me update the diary listing page to include tag filtering UI:
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Edit**
+
+Result:
+
+```
+The file /Users/szymon/Projects/szymonraczka-blog/src/routes/diary/+page.svelte has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+     3→
+     4→	let { data }: PageProps = $props();
+     5→</script>
+     6→
+     7→<div class="container mx-auto px-4 py-8">
+     8→	<header class="mb-8">
+     9→		<h1 class="text-4xl font-bold mb-4">My Diary</h1>
+    10→		<p class="text-lg text-gray-600">
+    11→			Uncensored snapshots of my life and rebuild, inspired by Rick Rubin.
+    12→		</p>
+    13→	</header>
+    14→
+    15→	{#await data.allTags then allTags}
+    16→		{#if allTags.length > 0}
+    17→			<div class="mb-8">
+    18→				<h2 class="text-sm font-medium text-gray-700 mb-3">Filter by tag:</h2>
+    19→				<div class="flex flex-wrap gap-2">
+    20→					<a 
+    21→						href="/diary" 
+    22→						class="px-3 py-1 rounded-full text-sm transition-colors {data.selectedTag === null ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}"
+    23→					>
+    24→						All
+    25→					</a>
+    26→					{#each allTags as tag}
+    27→						<a 
+    28→							href="/diary?tag={encodeURIComponent(tag)}" 
+    29→							class="px-3 py-1 rounded-full text-sm transition-colors {data.selectedTag === tag ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}"
+    30→						>
+    31→							{tag}
+    32→						</a>
+    33→					{/each}
+    34→				</div>
+    35→				{#if data.selectedTag}
+    36→					<p class="text-sm text-gray-600 mt-2">
+    37→						Showing entries tagged with "{data.selectedTag}"
+    38→					</p>
+    39→				{/if}
+    40→			</div>
+    41→		{/if}
+    42→	{/await}
+    43→
+    44→	{#await data.entries}
+    45→		<div class="text-center py-8">
+    46→			<p class="text-gray-500">Loading diary entries...</p>
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Now let me also update the individual entry tags to be clickable and link back to the filtered diary view:
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Edit**
+
+Result:
+
+```
+The file /Users/szymon/Projects/szymonraczka-blog/src/routes/diary/+page.svelte has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    62→									month: 'long',
+    63→									day: 'numeric'
+    64→								})}
+    65→							</time>
+    66→							{#if entry.tags.length > 0}
+    67→								<span class="mx-2">•</span>
+    68→								<div class="flex gap-2">
+    69→									{#each entry.tags as tag}
+    70→										<a 
+    71→											href="/diary?tag={encodeURIComponent(tag)}" 
+    72→											class="bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded text-xs transition-colors"
+    73→										>
+    74→											{tag}
+    75→										</a>
+    76→									{/each}
+    77→								</div>
+    78→							{/if}
+    79→						</div>
+    80→						{#if entry.excerpt}
+    81→							<p class="text-gray-700">{entry.excerpt}</p>
+    82→						{/if}
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Now let me test that the implementation works correctly:
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Bash** Check TypeScript errors
+
+`bun run check`
+
+Result:
+
+```
+====================================
+Loading svelte-check in workspace: /Users/szymon/Projects/szymonraczka-blog
+Getting Svelte diagnostics...
+
+====================================
+[32msvelte-check found 0 errors and 0 warnings
+[39m
+[0m[2m[35m$[0m [2m[1msvelte-kit sync && svelte-check --tsconfig ./tsconfig.json[0m
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Bash** Test build with tag filtering
+
+`bun run build`
+
+Result:
+
+```
+[36mvite v7.0.4 [32mbuilding SSR bundle for production...[36m[39m
+transforming...
+[32m✓[39m 171 modules transformed.
+rendering chunks...
+[36mvite v7.0.4 [32mbuilding for production...[36m[39m
+transforming...
+[32m✓[39m 156 modules transformed.
+rendering chunks...
+computing gzip size...
+[2m.svelte-kit/output/client/[22m[32m_app/version.json                       [39m[1m[2m 0.03 kB[22m[1m[22m[2m │ gzip:  0.05 kB[22m
+[2m.svelte-kit/output/client/[22m[32m.vite/manifest.json                     [39m[1m[2m 7.22 kB[22m[1m[22m[2m │ gzip:  1.01 kB[22m
+[2m.svelte-kit/output/client/[22m[35m_app/immutable/assets/0.BJo_w8N1.css    [39m[1m[2m14.35 kB[22m[1m[22m[2m │ gzip:  3.53 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/DjzPgcim.js       [39m[1m[2m 0.04 kB[22m[1m[22m[2m │ gzip:  0.06 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/NZTpNUN0.js       [39m[1m[2m 0.08 kB[22m[1m[22m[2m │ gzip:  0.09 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/entry/start.Bgu89Rq9.js  [39m[1m[2m 0.08 kB[22m[1m[22m[2m │ gzip:  0.09 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/CnVMEhnI.js       [39m[1m[2m 0.20 kB[22m[1m[22m[2m │ gzip:  0.18 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/0.C0APJSM-.js      [39m[1m[2m 0.21 kB[22m[1m[22m[2m │ gzip:  0.18 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/CYgJF_JY.js       [39m[1m[2m 0.34 kB[22m[1m[22m[2m │ gzip:  0.21 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/DQZkDq4V.js       [39m[1m[2m 0.41 kB[22m[1m[22m[2m │ gzip:  0.29 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/D-0nU6yX.js       [39m[1m[2m 0.52 kB[22m[1m[22m[2m │ gzip:  0.33 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/1.BjMH_FWp.js      [39m[1m[2m 0.58 kB[22m[1m[22m[2m │ gzip:  0.36 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/Bw4nZ521.js       [39m[1m[2m 1.25 kB[22m[1m[22m[2m │ gzip:  0.70 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/NBi6QasD.js       [39m[1m[2m 1.44 kB[22m[1m[22m[2m │ gzip:  0.87 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/DEeU0k8W.js       [39m[1m[2m 1.85 kB[22m[1m[22m[2m │ gzip:  1.08 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/5.-H0itAfd.js      [39m[1m[2m 1.94 kB[22m[1m[22m[2m │ gzip:  1.10 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/8.DatD0SvR.js      [39m[1m[2m 2.23 kB[22m[1m[22m[2m │ gzip:  0.99 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/BY0NHPm_.js       [39m[1m[2m 2.41 kB[22m[1m[22m[2m │ gzip:  1.33 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/2.D2Or-FFA.js      [39m[1m[2m 2.49 kB[22m[1m[22m[2m │ gzip:  0.95 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/6.BHSdIdGI.js      [39m[1m[2m 2.65 kB[22m[1m[22m[2m │ gzip:  1.30 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/3.fBwgrcpG.js      [39m[1m[2m 3.44 kB[22m[1m[22m[2m │ gzip:  1.54 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/B0jLQYLi.js       [39m[1m[2m 3.56 kB[22m[1m[22m[2m │ gzip:  1.49 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/7.NhTSKldX.js      [39m[1m[2m 4.36 kB[22m[1m[22m[2m │ gzip:  1.66 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/4.CgSCNpUg.js      [39m[1m[2m 5.02 kB[22m[1m[22m[2m │ gzip:  2.35 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/CRY5M6Iq.js       [39m[1m[2m 5.92 kB[22m[1m[22m[2m │ gzip:  2.85 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/entry/app.VGmJvU0G.js    [39m[1m[2m 5.98 kB[22m[1m[22m[2m │ gzip:  2.64 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/M5E4DKk6.js       [39m[1m[2m16.73 kB[22m[1m[22m[2m │ gzip:  6.73 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/BREucHKc.js       [39m[1m[2m30.52 kB[22m[1m[22m[2m │ gzip: 12.07 kB[22m
+[32m✓ built in 283ms[39m
+[2m.svelte-kit/output/server/[22m[32m.vite/manifest.json                                [39m[1m[2m  4.51 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[35m_app/immutable/assets/_layout.BJo_w8N1.css         [39m[1m[2m 14.35 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/_layout.svelte.js                    [39m[1m[2m  0.17 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36minternal.js                                        [39m[1m[2m  0.31 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/diary/_slug_/_page.ts.js             [39m[1m[2m  0.31 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/equality.js                                 [39m[1m[2m  0.33 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/diary/_page.ts.js                    [39m[1m[2m  0.46 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/fallbacks/error.svelte.js                  [39m[1m[2m  1.47 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/202507121430-building-content-system.js     [39m[1m[2m  1.47 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/diary/_slug_/_page.svelte.js         [39m[1m[2m  1.77 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/uses/_page.svelte.js                 [39m[1m[2m  2.07 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/_page.svelte.js                      [39m[1m[2m  2.41 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/now/_page.svelte.js                  [39m[1m[2m  2.49 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/202507121200-understanding-package-json.js  [39m[1m[2m  3.09 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/content.js                                  [39m[1m[2m  3.33 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/about/_page.svelte.js                [39m[1m[2m  3.37 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/open/_page.svelte.js                 [39m[1m[2m  4.19 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/diary/_page.svelte.js                [39m[1m[2m  4.49 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/exports.js                                  [39m[1m[2m  6.91 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/index.js                                    [39m[1m[2m  7.67 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/internal.js                                 [39m[1m[2m 50.31 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mindex.js                                           [39m[1m[2m105.88 kB[22m[1m[22m
+[32m✓ built in 1.71s[39m
+
+Run [1m[36mnpm run preview[22m[39m to preview your production build locally.
+[1m[36m
+> Using @sveltejs/adapter-netlify[22m[39m
+  [1m[33mNo netlify.toml found. Using default publish directory. Consult https://svelte.dev/docs/kit/adapter-netlify#usage for more details[22m[39m
+  [32m✔ done[39m
+[0m[2m[35m$[0m [2m[1mvite build[0m
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Perfect! The build is successful. Now let me update the task to mark the tag filtering as complete:
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Edit**
+
+Result:
+
+```
+The file /Users/szymon/Projects/szymonraczka-blog/backlog/tasks/task-4 - Build-diary-listing-page.md has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    16→## Acceptance Criteria
+    17→
+    18→- [x] Page displays entries in chronological order (newest first)
+    19→- [x] Shows title date and excerpt for each entry
+    20→- [x] Tag filtering works (personal howtos glossary)
+    21→- [x] Intro header matches PRD vision (Rick Rubin inspired)
+    22→- [x] Responsive design with clean layout
+    23→
+    24→## Implementation Notes
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Now let me update the implementation notes to reflect the tag filtering completion:
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Edit**
+
+Result:
+
+```
+The file /Users/szymon/Projects/szymonraczka-blog/backlog/tasks/task-4 - Build-diary-listing-page.md has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    39→- Rick Rubin inspired header: "Uncensored snapshots of my life and rebuild"
+    40→- Clean, responsive design using TailwindCSS v4
+    41→- Loading states and error handling via SvelteKit patterns
+    42→
+    43→**Tag Filtering Implementation:**
+    44→- Added URL-based tag filtering via query parameters (?tag=tagname)
+    45→- Tag filter UI with "All" option and individual tag pills
+    46→- Clickable tags on diary entries that link to filtered views
+    47→- Visual indication of currently selected tag
+    48→- Server-side filtering using existing content system functions
+    49→
+    50→**Technical Implementation:**
+    51→- File: src/routes/diary/+page.ts (load function)
+    52→- File: src/routes/diary/+page.svelte (listing component)
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Now let me mark the task as Done:
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Bash** Mark task 4 as Done with complete functionality
+
+`backlog task edit 4 -s Done`
+
+Result:
+
+```
+The user doesn't want to proceed with this tool use. The tool use was rejected (eg. if it was a file edit, the new_string was NOT written to the file). STOP what you are doing and wait for the user to tell you how to proceed.
+```
+
+_**User**_
+
+[Request interrupted by user for tool use]
+
+---
+
+_**User**_
+
+czy w PRD nie bylo czasem, ze urle maja byc po slashu? czyli np localhost:5173/diary/devlog zamiast http://localhost:5173/diary?tag=devlog
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Świetna uwaga! Masz rację, sprawdźmy PRD pod kątem struktury URL-i:
+
+---
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Tool use: **Grep** path `./PRD.md`
+
+Result:
+
+```
+The site emphasizes authenticity: all content as "diary entries" – uncensored snapshots of life, burnout, success, and tech learnings with personal anecdotes (e.g., laughing at past confusion over package.json); practical explanations with everyday analogies (e.g., codebase as restaurant kitchen); and static pages for current status and tools.
+The site is built with simplicity in mind: minimal features to solve today's problems (publishing content without cognitive overload), organized by tags within a single diary domain, and bilingual (English as default, Polish as secondary).
+### Goals
+- Enable quick publishing of "diary entries" (raw thoughts on burnout, 165M YouTube views success, work-from-car happiness, perfectionism escape, tech journeys) to build audience resonance through transparency and honesty.
+- Provide tech resources as diary entries for non-tech founders: step-by-step guides and term explanations using simple analogies from daily life (kitchen, work, restaurant) to demystify concepts like codebases or AI-assisted building, infused with personal reflections (e.g., "honest of where I am at" – sharing the journey from brain-melting confusion to current ease).
+- Share open metrics (debts, future incomes, shocking personal facts) to inspire and shock "average Joes."
+- Support bilingual content: English as primary (no prefix in URLs), Polish as optional (with top-level /pl prefix, e.g., /pl/diary/slug) for easier initial drafting in Polish then translation.
+- Minimize maintenance: single source of truth for content in root-level /content folder (subdivided by language, all under diary), no deep nesting, predictable naming.
+### Target Audience
+--
+## 2. Features
+Organized by domain for clarity. All dynamic content (entries) sourced from root /content/{lang}/diary/_.md files (e.g., /content/en/diary/202507121430-netlify-deploy.md – prefixed with YYYYMMDDHHMM for chronological order). Use frontmatter tags (e.g., tags: ['personal', 'howtos', 'glossary']) for filtering. Static pages in root /content/en/static/_.md or hard-coded if simple.
+### 2.1 Diary Domain (/diary)
+- **Purpose**: All content as honest diary entries – personal reflections (therapy sessions on burnout, success failures like hiring after 165M views, prokrastynacja escape, work-from-car excitement) mixed with tech resources (howtos like deploy to Netlify step-by-step, glossary explanations with everyday analogies and personal journeys, e.g., "It used to melt my brain looking at package.json; now it's funny how simple it feels").
+- **Features**:
+  - List page: /diary – Displays chronological list of all entries (titles, dates, excerpts, tags). Intro header: "My Diary: Uncensored snapshots of my life and rebuild, inspired by Rick Rubin." Include tag-based filters/sections (e.g., Personal, Howtos for non-tech founders, Glossary).
+  - Single entry: /diary/{slug} – Full markdown-rendered content, display tags.
+  - Bilingual: Default EN (/diary/slug), PL via /pl/diary/slug (same slug, different content file).
+  - Cross-linking: Natural in markdown (e.g., [package.json](/diary/glossary-package-json)); no hover effects (basic <a> tags).
+- **Content Rules**: Everything "honest of where I am at" – pure personal/philosophical for 'personal' tags; concise howtos/glossary with relatable analogies and personal anecdotes (e.g., sharing the learning curve, past struggles, current insights). Inspired by Paul Graham essays but grounded in Rubin's no-blocks mindset.
+### 2.2 Static Pages
+--
+### 2.3 Global Features
+- **Navigation**: Simple header/footer with links to /diary (and tag filters, e.g., /diary?tag=howtos if needed) and static pages.
+- **Bilingual Handling**:
+  - **English (Primary)**: Main version with clean URLs (no language prefix)
+    - Examples: `/diary/slug`, `/about`, `/uses`, `/now`, `/open`
+  - **Polish (Secondary)**: Accessible via `/pl` prefix for all routes
+    - Examples: `/pl/diary/slug`, `/pl/about`, `/pl/uses`, `/pl/now`, `/pl/open`
+  - Content files organized separately: `/content/en/...` and `/content/pl/...`
+  - No auto-language detection; users choose via language toggle in navigation
+  - Polish serves as drafting language (easier for Szymon), then manual translation to English
+- **Markdown Support**: All content in .md with frontmatter (title, date, tags) for parsing/filtering.
+- **Deployment**: Host on Vercel/Netlify; free tier sufficient.
+## 3. Non-Functional Requirements
+--
+## 4. Success Metrics
+- Publish first diary entry (with tags, honest tech anecdote) within days.
+- Easy updates: Add .md with tags, git push, deploy.
+- Reader feedback on transparency (qualitative).
+## 5. Risks and Mitigations
+- Risk: Content duplication in langs – Mitigation: Write EN first (main), translate to PL manually.
+- Risk: Scope creep (e.g., complex tag filters) – Mitigation: Stick to MVP; add only after core works.
+- Risk: Loss of separation without tags – Mitigation: Clear tag-based filters in nav/list page.
+```
+
+_**Agent (claude-sonnet-4-20250514)**_
+
+Interesting! W PRD widzę mieszane podejście:
+
+1. **W sekcji 2.1 Diary Domain:** Jest wzmianka o "tag-based filters/sections (e.g., Personal, Howtos for non-tech founders, Glossary)" - co sugeruje sekcje, ale nie mówi konkretnie o URL-ach.
+
+2. **W sekcji 2.3 Global Features:** Jest przykład "/diary?tag=howtos if needed" - co wskazuje na query parameters.
+
+Ale rzeczywiście, jeśli myślimy o **clean URLs** i SEO, to `/diary/devlog` byłoby bardziej eleganckie niż `/diary?tag=devlog`.
+
+Czy chciałbyś, żebym **zrefaktorował** tag filtering do używania clean URLs? To znaczy:
+
+- `/diary` - wszystkie wpisy
+- `/diary/devlog` - wpisy z tagiem "devlog"  
+- `/diary/personal` - wpisy z tagiem "personal"
+- `/diary/howtos` - wpisy z tagiem "howtos"
+
+To wymagałoby:
+1. Stworzenia route `/diary/[tag]/+page.ts` i `/diary/[tag]/+page.svelte`
+2. Aktualizacji linków w UI
+3. Rozróżnienia między tagami a slugami dla pojedynczych wpisów
+
+Co myślisz? Czy to ma sens w kontekście PRD i lepszego UX?
+
+---
+
+_**User**_
+
+yep! go for it and then update PRD for consistency and the task to include what was actually done
+
 ---
 
