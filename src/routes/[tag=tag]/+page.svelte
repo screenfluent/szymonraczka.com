@@ -19,7 +19,7 @@
 				<div class="flex flex-wrap gap-2">
 					<a 
 						href="/diary" 
-						class="px-3 py-1 rounded-full text-sm transition-colors {data.selectedTag === null ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}"
+						class="px-3 py-1 rounded-full text-sm transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
 					>
 						All
 					</a>
@@ -85,9 +85,9 @@
 			</div>
 		{:else}
 			<div class="text-center py-12">
-				<p class="text-gray-500 text-lg">No diary entries yet.</p>
+				<p class="text-gray-500 text-lg">No diary entries found for "{data.selectedTag}".</p>
 				<p class="text-gray-400 text-sm mt-2">
-					Start sharing your honest thoughts and experiences.
+					<a href="/diary" class="text-blue-600 hover:underline">View all entries</a>
 				</p>
 			</div>
 		{/if}

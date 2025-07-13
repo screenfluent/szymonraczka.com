@@ -1,9 +1,12 @@
-import { loadDiaryEntries } from '$lib/content';
+import { loadDiaryEntries, getAllTags } from '$lib/content';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = () => {
-	// Return the promise directly. SvelteKit will stream the data.
+	// This page now only shows all entries.
+	// The selectedTag is null because no tag is selected here.
 	return {
-		entries: loadDiaryEntries('en')
+		entries: loadDiaryEntries('en'),
+		allTags: getAllTags('en'),
+		selectedTag: null
 	};
 };
