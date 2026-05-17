@@ -1,0 +1,6 @@
+/.agents/
+/.codex/
+/blog
+/tmp/
+/dist/
+*.log
