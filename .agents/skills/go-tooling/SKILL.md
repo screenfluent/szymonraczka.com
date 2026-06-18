@@ -91,6 +91,10 @@ actionlint
 
 Use deeper files only when the task touches that risk:
 
+- [context.md](./context.md) for `context.Context`, cancellation, timeouts, and request lifecycle
+- [safety.md](./safety.md) for nil, slices, maps, numeric conversions, resources, goroutines, and defensive copying
+- [dependencies.md](./dependencies.md) for `go.mod`, `go.sum`, tools, external packages, and vulnerability review
+- [documentation.md](./documentation.md) for README, godoc, examples, ADRs, and AI-facing docs
 - [security.md](./security.md)
 - [database.md](./database.md)
 - [operations.md](./operations.md)

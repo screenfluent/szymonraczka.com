@@ -41,11 +41,28 @@ Treat diagnostics practically:
 
 ## Debugging
 
+Use a tight troubleshooting loop:
+
+1. reproduce the failure
+2. name one hypothesis
+3. inspect the smallest relevant code path
+4. use a debugger, trace, profile, or focused log to test that hypothesis
+5. fix the root cause
+6. verify the failing path and nearest regression test
+
 If runtime behavior contradicts code reading, use debugger instead of random logs:
 
 ```sh
 dlv test ./pkg/name -- -test.run TestName
 dlv debug ./cmd/app
+```
+
+For races, deadlocks, leaks, or scheduler questions, prefer Go tools over guesswork:
+
+```sh
+go test -race ./...
+go test ./... -run TestName -trace /tmp/trace.out
+go tool trace /tmp/trace.out
 ```
 
 Remove temporary logs and assumptions after debugging.

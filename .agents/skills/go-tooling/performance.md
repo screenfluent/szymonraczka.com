@@ -12,17 +12,21 @@ Add cache only when there is a real reason and invalidation is clear.
 
 ## Benchmarks
 
+Write benchmarks only for a named hot path or regression risk. For new benchmarks on modern Go, prefer `b.Loop()` when it fits the benchmark shape.
+
 ```sh
 go test ./... -run '^$' -bench . -benchmem
 ```
 
-Compare with `benchstat`:
+Compare before/after with repeated runs and `benchstat`:
 
 ```sh
 go test ./... -run '^$' -bench BenchmarkName -benchmem -count=10 > /tmp/before.txt
 go test ./... -run '^$' -bench BenchmarkName -benchmem -count=10 > /tmp/after.txt
 benchstat /tmp/before.txt /tmp/after.txt
 ```
+
+Report benchmark numbers in the final note. Do not claim a performance win from a single noisy run.
 
 ## Profiling
 

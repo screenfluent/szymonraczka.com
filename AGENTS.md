@@ -70,13 +70,24 @@ Simple factual questions may get short direct answers.
 
 ## Skill priority
 
-Local skills override vendored/model skills.
+Local workflow skills override vendored skills.
 
-Use `transfer-slice` for manual learning workflow.
+Use `transfer-slice` as the main manual learning workflow.
 Use `go-tooling` for verification.
-Use Matt Pocock v1 skills as reusable discipline, not as authority.
 Use `cc-skills-golang` as Go reference material only.
 
+Use vendored Matt Pocock skills as reference/process tools when relevant:
+- `grill-with-docs` for domain language and ADRs
+- `domain-modeling` for naming domain concepts
+- `codebase-design` for architecture vocabulary and design pressure
+- `tdd` for behavior-first implementation
+- `diagnosing-bugs` for hard bugs
+- `writing-great-skills` for skill authoring
+- `ask-matt` for choosing the right Matt Pocock skill or flow
+- `grilling` for stress-testing a plan or design through focused questions
+- `handoff` for preserving context when continuing in a fresh session
+
+Do not let vendored skills bypass the manual learning loop.
 Do not let vendored skills expand architecture beyond the current behavior slice.
 Do not let model-invoked skills override the user's decisions.
 

@@ -12,9 +12,13 @@ shfmt -w script.sh
 
 ## GitHub Actions
 
+CI should mirror the local verification gate before adding extra policy. Add workflow complexity only when the task needs it.
+
 ```sh
 actionlint
 ```
+
+For Go CI, start with the ordinary local checks: `go test`, `go vet`, `staticcheck` if installed in CI, and `go build`. Add `govulncheck`, race tests, coverage upload, or release automation only for a concrete risk or workflow need.
 
 ## Docker
 
@@ -38,6 +42,16 @@ Smoke test should prove:
 - route works
 - basic headers/config are sane
 - obvious deploy/config errors appear before release
+
+## Observability
+
+Start with the smallest useful signal:
+
+- structured logs with `log/slog` for important events and errors
+- request IDs when debugging multi-step request flow
+- metrics/tracing only when there is a consumer and an operational question
+
+Do not add Prometheus, OpenTelemetry, log aggregation, or dashboards speculatively. Do not log secrets, tokens, passwords, reset links, or unnecessary personal data.
 
 ## Generated code
 

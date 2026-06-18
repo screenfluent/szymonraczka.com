@@ -198,7 +198,8 @@ Rules:
 
 Trigger: post, note, essay, page, project, link, bookmark, reply, feed item, or new content concept.
 
-Use `grill-with-docs`, which delegates to `grilling` and `domain-modeling`.
+Use `domain-modeling` for glossary and ADR discipline.
+Use `grilling` style questioning to resolve terminology and trade-offs.
 
 Decide:
 - canonical term
