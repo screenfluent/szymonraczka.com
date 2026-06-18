@@ -49,8 +49,11 @@ Check `../llm-generated/`:
 ```sh
 cd ../llm-generated
 git status --short
-go test ./...
-go build ./...
+go_files=($(git ls-files '*.go'))
+if ((${#go_files[@]})); then gopls check "${go_files[@]}"; fi
+packages=($(go list ./...))
+if ((${#packages[@]})); then go test "${packages[@]}"; fi
+if ((${#packages[@]})); then go build "${packages[@]}"; fi
 ```
 
 If `../llm-generated/` is dirty or broken, stop. The generated candidate must be fixed in its own session first.
