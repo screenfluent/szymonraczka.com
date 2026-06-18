@@ -26,9 +26,11 @@ Use `go doc` instead of guessing signatures or standard library behavior.
 ## gopls
 
 `gopls` is required in this workflow.
+`gopls check` expects Go file paths, not `./...` package patterns.
 
 ```sh
-gopls check ./...
+go_files=($(git ls-files '*.go'))
+if ((${#go_files[@]})); then gopls check "${go_files[@]}"; fi
 gopls references path/to/file.go:line:col
 gopls definition path/to/file.go:line:col
 ```

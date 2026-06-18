@@ -20,12 +20,14 @@ Use `goimports` only if the project already uses it.
 
 ```sh
 gofmt -w <changed-go-files>
-gopls check ./...
-go test ./... -run '<relevant-test>' -count=1
-go test ./...
-go vet ./...
-staticcheck ./...
-go build ./...
+go_files=($(git ls-files '*.go'))
+if ((${#go_files[@]})); then gopls check "${go_files[@]}"; fi
+packages=($(go list ./...))
+if ((${#packages[@]})); then go test -run '<relevant-test>' -count=1 "${packages[@]}"; fi
+if ((${#packages[@]})); then go test "${packages[@]}"; fi
+if ((${#packages[@]})); then go vet "${packages[@]}"; fi
+if ((${#packages[@]})); then staticcheck "${packages[@]}"; fi
+if ((${#packages[@]})); then go build "${packages[@]}"; fi
 git diff --check
 ```
 
