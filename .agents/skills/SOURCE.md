@@ -8,6 +8,9 @@
 * go-tooling
     * Purpose: Go toolchain usage, verification gates, and evidence-based reports.
     * Last edited: 2026-06-18
+* sm20-flashcards
+    * Purpose: Generate and approve SM-20-style atomic flashcards from LEARNING.md learning events.
+    * Last edited: 2026-06-18
 
 ## Vendored skill packs
 

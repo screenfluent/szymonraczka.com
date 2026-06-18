@@ -296,9 +296,30 @@ Create/update `LEARNING.md` only when:
 - the gap may affect future slices
 - user explicitly asks to record it
 
-Language: Polish sentences, English technical terms when useful.
+Append learning events with stable IDs. Do not rewrite old IDs.
 
-Open gaps may be resolved and moved to `Zamknięte` when understood.
+```md
+## LE-YYYY-MM-DD-NNN-slug
+
+status: understood|needs_work
+topic: ...
+cards: pending|skipped
+source: transfer-slice
+
+evidence:
+...
+
+misconception_fixed:
+...
+
+tutor_notes:
+...
+```
+
+Use `tutor_notes` to preserve learner-specific nuance, misconceptions, and useful teaching phrasing.
+Only `status: understood` and `cards: pending` events are eligible for `sm20-flashcards`.
+
+Language: Polish sentences, English technical terms when useful.
 
 ## Final report
 
