@@ -1,0 +1,9 @@
+.env
+.env.*
+*.sqlite
+*.db
+tmp/
+bin/
+dist/
+coverage.out
+.DS_Store
