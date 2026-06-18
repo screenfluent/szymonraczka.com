@@ -74,8 +74,9 @@ Local workflow skills override vendored skills.
 
 Use `transfer-slice` as the main manual learning workflow.
 Use `go-tooling` for verification.
-Use `sm20-flashcards` only when the user explicitly starts flashcard generation or review.
 Use `cc-skills-golang` as Go reference material only.
+
+Flashcard generation is a separate user-started workflow handled by `sm20-flashcards`; do not generate cards during normal transfer.
 
 Use vendored Matt Pocock skills as reference/process tools when relevant:
 - `grill-with-docs` for domain language and ADRs
