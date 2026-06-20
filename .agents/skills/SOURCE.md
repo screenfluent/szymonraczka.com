@@ -4,7 +4,7 @@
 
 * transfer-slice
     * Purpose: Manual transfer of small behavior slices from ../llm-generated/ into manual/.
-    * Last edited: 2026-06-18
+    * Last edited: 2026-06-19
 * go-tooling
     * Purpose: Go toolchain usage, verification gates, and evidence-based reports.
     * Last edited: 2026-06-18

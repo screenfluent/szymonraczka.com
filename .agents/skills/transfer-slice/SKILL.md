@@ -11,6 +11,8 @@ Help the user manually rebuild one small behavior slice from `../llm-generated/`
 
 Do not edit app code in `manual/` automatically. Teach, review, propose, verify, and wait for manual copying.
 
+Audience: solo indie hacker with AuDHD, basic web literacy, and limited Go muscle memory. Use short numbered blocks. No walls of text.
+
 ## Assumptions
 
 Run from `manual/`.
@@ -87,7 +89,7 @@ How we will verify:
 - exact command/test/curl/browser check
 ```
 
-Wait for the user's choice.
+Prefer outside-in web slices: first visible route/home/main wiring, then internals. Wait for the user's choice.
 
 ## Blocking checkpoints
 
@@ -112,7 +114,7 @@ Cover:
 
 ### Structure/naming checkpoint
 
-Trigger: new folder, package, or major file split.
+Trigger: new folder, package, major file split, exported function/method/type, or meaningful domain variable.
 
 Cover:
 - 2–3 names
@@ -247,6 +249,10 @@ Refactor only after GREEN and only for a concrete reason:
 
 Do not refactor because code could be prettier.
 
+## Learner comments
+
+Allow comments that make code readable to this learner now. Prefer file-top purpose comments and short notes on confusing Go syntax/data flow. Do not reject a comment only because an experienced developer could infer it from code.
+
 ## Verification gate
 
 Ordinary slice gate:
@@ -269,6 +275,8 @@ Run additional gates based on risk. Use `go-tooling`. Use `tdd` for behavior-tes
 ## Understanding check
 
 After each slice, ask 2–3 control questions.
+
+Build vocabulary before quizzing. Do not ask about a Go term or idiom before explaining it with a tiny example.
 
 If the user does not understand:
 - stop
