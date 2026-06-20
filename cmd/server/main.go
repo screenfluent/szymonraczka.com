@@ -22,6 +22,7 @@ func newHandler() http.Handler {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /{$}", home)
+	mux.HandleFunc("GET /sixteenth-attempt", sixteenthAttemptPost)
 
 	return mux
 }
@@ -59,6 +60,25 @@ func home(w http.ResponseWriter, r *http.Request) {
                 </li>
              </ul>
           </section>
+       </main>
+    </body>
+    </html>`)
+}
+
+func sixteenthAttemptPost(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
+	io.WriteString(w, `<!doctype html>
+    <html lang="en">
+    <head>
+       <meta charset="utf-8">
+       <title>Sixteenth Attempt</title>
+    </head>
+    <body>
+       <main>
+          <article>
+             <h1>Sixteenth Attempt</h1>
+          </article>
        </main>
     </body>
     </html>`)

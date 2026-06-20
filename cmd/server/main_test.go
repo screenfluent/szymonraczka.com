@@ -30,6 +30,23 @@ func TestHomePage(t *testing.T) {
 	assertContains(t, body, `href="/sixteenth-attempt"`)
 }
 
+func TestSixteenthAttemptPost(t *testing.T) {
+	handler := newHandler()
+
+	request := httptest.NewRequest(http.MethodGet, "/sixteenth-attempt", nil)
+	response := httptest.NewRecorder()
+
+	handler.ServeHTTP(response, request)
+
+	if response.Code != http.StatusOK {
+		t.Fatalf("expected status 200, got %d", response.Code)
+	}
+
+	body := response.Body.String()
+
+	assertContains(t, body, "Sixteenth Attempt")
+}
+
 func assertContains(t *testing.T, body string, want string) {
 	t.Helper()
 
