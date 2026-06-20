@@ -205,8 +205,8 @@ Rules:
 
 Trigger: post, note, essay, page, project, link, bookmark, reply, feed item, or new content concept.
 
-Use `domain-modeling` for glossary and ADR discipline.
-Use `grilling` style questioning to resolve terminology and trade-offs.
+Use `mattpocock-domain-modeling` for glossary and ADR discipline.
+Use `mattpocock-grilling` style questioning to resolve terminology and trade-offs.
 
 Decide:
 - canonical term
@@ -270,7 +270,7 @@ if ((${#packages[@]})); then go build "${packages[@]}"; fi
 git diff --check
 ```
 
-Run additional gates based on risk. Use `go-tooling`. Use `tdd` for behavior-test discipline and `codebase-design` when a seam/interface/package shape is unclear.
+Run additional gates based on risk. Use `go-tooling`. Use `mattpocock-tdd` for behavior-test discipline and `mattpocock-codebase-design` when a seam/interface/package shape is unclear.
 
 ## Understanding check
 

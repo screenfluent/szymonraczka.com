@@ -19,27 +19,27 @@
 Source: https://github.com/mattpocock/skills
 Reference release: mattpocock-skills@1.0.0
 Last checked: 2026-06-18
-Local changes: none
+Local changes: flattened skill directories to `.agents/skills/mattpocock-*`, prefixed `name:` fields so MastraCode can discover them, and updated local cross-skill references
 
 Included in manual:
 
-* ask-matt
-* codebase-design
-* diagnosing-bugs
-* domain-modeling
-* grill-with-docs
-* grilling
-* handoff
-* tdd
-* writing-great-skills
+* mattpocock-ask-matt
+* mattpocock-codebase-design
+* mattpocock-diagnosing-bugs
+* mattpocock-domain-modeling
+* mattpocock-grill-with-docs
+* mattpocock-grilling
+* mattpocock-handoff
+* mattpocock-tdd
+* mattpocock-writing-great-skills
 
 Notes:
 
-* These skills are vendored under .agents/skills/mattpocock/.
-* Keep upstream skills unchanged unless a local change is intentional.
-* If any vendored skill is edited locally, change Local changes from none to a short explanation.
+* These skills are vendored under `.agents/skills/mattpocock-*`.
+* Keep upstream skill content unchanged unless a local change is intentional.
+* If any vendored skill content is edited locally, update Local changes with a short explanation.
 * Do not auto-update vendored skills.
-* Update this file when skills are added, removed, or changed.
+* Update this file when skills are added, removed, renamed, or changed.
 
 ### cc-skills-golang
 
@@ -47,32 +47,32 @@ Source: https://github.com/samber/cc-skills-golang
 Reference commit: a5e0e5997aac169b659e70cb826a20b489bc4c6c
 Copied: 2026-06-18
 Last checked: 2026-06-18
-Local changes: added `disable-model-invocation: true` to vendored skill files so cc-skills-golang stays reference-only; local README documents the curated subset
+Local changes: added `disable-model-invocation: true`; flattened skill directories to `.agents/skills/cc-skills-golang-*`; prefixed `name:` fields; moved pack README/LICENSE to `.agents/skills/cc-skills-golang-README.md` and `.agents/skills/cc-skills-golang-LICENSE`
 
 Included in manual:
 
-* golang-code-style
-* golang-naming
-* golang-error-handling
-* golang-testing
-* golang-structs-interfaces
-* golang-concurrency
-* golang-security
-* golang-database
-* golang-context
-* golang-safety
-* golang-dependency-management
-* golang-documentation
-* golang-troubleshooting
+* cc-skills-golang-golang-code-style
+* cc-skills-golang-golang-naming
+* cc-skills-golang-golang-error-handling
+* cc-skills-golang-golang-testing
+* cc-skills-golang-golang-structs-interfaces
+* cc-skills-golang-golang-concurrency
+* cc-skills-golang-golang-security
+* cc-skills-golang-golang-database
+* cc-skills-golang-golang-context
+* cc-skills-golang-golang-safety
+* cc-skills-golang-golang-dependency-management
+* cc-skills-golang-golang-documentation
+* cc-skills-golang-golang-troubleshooting
 
 Notes:
 
-* These selected skills are vendored under .agents/skills/cc-skills-golang/.
+* These selected skills are vendored under `.agents/skills/cc-skills-golang-*`.
 * Use them as Go reference material only; project workflow remains governed by transfer-slice and go-tooling.
 * They are hidden from automatic model invocation with `disable-model-invocation: true`; load/read them explicitly when deeper reference is useful.
 * Local go-tooling also contains compact workflow-focused notes distilled from broader Samber topics: context, safety, dependencies, documentation, troubleshooting, linting, performance, observability, and CI.
 * Skills intentionally not included: framework/library-specific skills, architecture-expanding skills, broad learning/reference skills, and workflow/tooling skills already covered locally in go-tooling.
-* Keep upstream skill files unchanged unless a local change is intentional.
-* If any vendored skill is edited locally, change Local changes from none to a short explanation.
+* Keep upstream skill content unchanged unless a local change is intentional.
+* If any vendored skill content is edited locally, update Local changes with a short explanation.
 * Do not auto-update vendored skills.
-* Update this file when skills are added, removed, or changed.
+* Update this file when skills are added, removed, renamed, or changed.

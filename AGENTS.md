@@ -78,20 +78,20 @@ Local workflow skills override vendored skills.
 
 Use `transfer-slice` as the main manual learning workflow.
 Use `go-tooling` for verification.
-Use `cc-skills-golang` as Go reference material only.
+Use `cc-skills-golang-*` skills as Go reference material only.
 
 Flashcard generation is a separate user-started workflow handled by `sm20-flashcards`; do not generate cards during normal transfer.
 
 Use vendored Matt Pocock skills as reference/process tools when relevant:
-- `grill-with-docs` for domain language and ADRs
-- `domain-modeling` for naming domain concepts
-- `codebase-design` for architecture vocabulary and design pressure
-- `tdd` for behavior-first implementation
-- `diagnosing-bugs` for hard bugs
-- `writing-great-skills` for skill authoring
-- `ask-matt` for choosing the right Matt Pocock skill or flow
-- `grilling` for stress-testing a plan or design through focused questions
-- `handoff` for preserving context when continuing in a fresh session
+- `mattpocock-grill-with-docs` for domain language and ADRs
+- `mattpocock-domain-modeling` for naming domain concepts
+- `mattpocock-codebase-design` for architecture vocabulary and design pressure
+- `mattpocock-tdd` for behavior-first implementation
+- `mattpocock-diagnosing-bugs` for hard bugs
+- `mattpocock-writing-great-skills` for skill authoring
+- `mattpocock-ask-matt` for choosing the right Matt Pocock skill or flow
+- `mattpocock-grilling` for stress-testing a plan or design through focused questions
+- `mattpocock-handoff` for preserving context when continuing in a fresh session
 
 Do not let vendored skills bypass the manual learning loop.
 Do not let vendored skills expand architecture beyond the current behavior slice.
