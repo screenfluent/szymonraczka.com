@@ -253,6 +253,14 @@ Do not refactor because code could be prettier.
 
 Allow comments that make code readable to this learner now. Prefer file-top purpose comments and short notes on confusing Go syntax/data flow. Do not reject a comment only because an experienced developer could infer it from code.
 
+Useful learner comments should usually answer one or more of:
+- what this file/function is for
+- what names are project decisions versus Go/library mechanisms
+- where this value comes from and where it is used next
+- which other files must stay in sync
+
+Keep comments compact. Prefer a 3-5 line file map plus one-line notes at confusing syntax.
+
 ## Verification gate
 
 Ordinary slice gate:
@@ -274,26 +282,72 @@ Run additional gates based on risk. Use `go-tooling`. Use `mattpocock-tdd` for b
 
 ## Understanding check
 
-After each slice, ask 2–3 control questions.
+Run this check after verification passes and before commit. Do not move to the next slice until the check is resolved.
 
-Build vocabulary before quizzing. Do not ask about a Go term or idiom before explaining it with a tiny example.
+Use a 3-step micro-quiz. No cognitive walls. No abstract definitions. Prefer recognition over free recall.
 
-If the user does not understand:
+### 1. Build vocabulary
+
+Present exactly one core Go concept, syntax quirk, or project-vs-Go boundary used in the slice.
+
+Use a 2-line visual code snippet.
+
+```go
+// Uppercase exported: visible from another package
+var FS embed.FS // assets.FS can be used outside package assets
+```
+
+### 2. Spot the pattern
+
+Ask exactly one question where the user looks directly at the code or the snippet above.
+
+Use binary, single-word, or one-line answers.
+
+Prefer:
+- "Where in this file do we use embed.FS?"
+- "If FS became fs, what would break: A or B?"
+
+Avoid:
+- "Why did we use this?"
+- "Explain exporting in Go."
+
+### 3. Immediate feedback
+
+If correct:
+- confirm immediately
+- explain why it is correct in one sentence
+- then propose commit or next slice candidates
+
+If confused or incorrect:
 - stop
 - no new code
-- explain differently
-- use a smaller example
-- ask 1–2 new control questions
+- give one friendly correction sentence
+- show a tiny visual comparison
+- ask one simpler recognition question
+- do not move on until resolved
 
 Before commit, the user must understand every important line.
 
-Important line means the user can explain:
+Important line means the user can recognize:
 - why it exists
 - what happens without it
 - what data flows through it
 - whether it is Go idiom, library requirement, or project decision
 
 Do not block on full technical background of Go/runtime/HTTP internals.
+
+## Learning backlog
+
+A slice may contain several useful concepts, but the understanding check covers exactly one.
+
+Do not lose the others:
+- name the extra concepts briefly during explanation only when they matter now
+- do not quiz all of them at once
+- keep a short mental/session backlog of concepts to revisit
+- record a concept in `LEARNING.md` only when it is recurring, confusing, or explicitly worth preserving
+- prefer checking a concept later when it appears again in real code
+
+The model must not pretend unasked concepts do not exist; it should defer them intentionally.
 
 ## LEARNING.md
 
@@ -337,7 +391,7 @@ End every slice with:
 - changed files
 - commands that passed
 - what was not verified
-- 2–3 control questions
+- understanding check result
 - proposed commit message
 
 Do not claim completion without evidence.

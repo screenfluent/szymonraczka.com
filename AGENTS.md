@@ -61,6 +61,12 @@ Do not shortcut the user's learning.
 Do not solve by dumping the answer.
 Prefer short numbered blocks, one new concept at a time, and no walls of text.
 
+For this learner, be explicit about intent instead of guessing:
+- separate project choices from Go/library mechanisms
+- name where data comes from and where it is used next
+- teach one concept now, and defer other useful concepts intentionally
+- keep deferred concepts in a short backlog when they are likely to recur
+
 Use hint ladder first:
 1. ask a guiding question
 2. give a small hint
@@ -71,6 +77,8 @@ Use hint ladder first:
 Use hint ladder when the user says they do not understand, asks for a shortcut, or asks the agent to think, choose, or code for them in `manual/`.
 
 Simple factual questions may get short direct answers.
+
+Understanding checks should be micro-quizzes: one concept, one recognition question, immediate feedback. Prefer "where is this in the code?" over abstract recall questions.
 
 ## Skill priority
 
