@@ -2,9 +2,12 @@ package main
 
 import (
 	"io"
+	"io/fs"
 	"log"
 	"net/http"
 	"time"
+
+	"szymonraczka.com/web"
 )
 
 func main() {
@@ -21,6 +24,20 @@ func main() {
 func newHandler() http.Handler {
 	mux := http.NewServeMux()
 
+
+	// Wyciągamy zawartość wbudowanego folderu web/static,
+	// żeby fileServer traktował ten folder jako swój główny (root).
+	staticFiles, err := fs.Sub(web.Files, "static")
+	if err != nil {
+		panic(err)
+	}
+
+	fileServer := http.FileServerFS(staticFiles)
+
+	// StripPrefix odcina "/static/" z przedlądarki, żeby ścieżka np. "site.css"
+	// idealnie pasowała do tego, co fileServer widzi u siebie na wierzchu.
+	mux.Handle("GET /static/", http.StripPrefix("/static/", fileServer))
+
 	mux.HandleFunc("GET /{$}", home)
 	mux.HandleFunc("GET /now", nowPage)
 	mux.HandleFunc("GET /sixteenth-attempt", sixteenthAttemptPost)
@@ -36,6 +53,7 @@ func home(w http.ResponseWriter, r *http.Request) {
     <head>
        <meta charset="utf-8">
        <meta name="viewport" content="width=device-width, initial-scale=1">
+       <link rel="stylesheet" href="/static/site.css">
        <title>Szymon Raczka</title>
     </head>
     <body>
@@ -87,6 +105,7 @@ func sixteenthAttemptPost(w http.ResponseWriter, r *http.Request) {
     <head>
        <meta charset="utf-8">
        <meta name="viewport" content="width=device-width, initial-scale=1">
+       <link rel="stylesheet" href="/static/site.css">
        <title>Sixteenth Attempt</title>
     </head>
     <body>
@@ -110,6 +129,7 @@ func nowPage(w http.ResponseWriter, r *http.Request) {
         <head>
            <meta charset="utf-8">
            <meta name="viewport" content="width=device-width, initial-scale=1">
+           <link rel="stylesheet" href="/static/site.css">
            <title>now</title>
         </head>
         <body>

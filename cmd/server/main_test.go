@@ -96,6 +96,24 @@ func TestPublicPagesUseSharedShell(t *testing.T) {
 			assertContains(t, body, `<header>`)
 			assertContains(t, body, `href="/"`)
 			assertContains(t, body, `<main>`)
+			assertContains(t, body, `<link rel="stylesheet" href="/static/site.css">`)
 		})
 	}
+}
+
+func TestStaticStylesheet(t *testing.T) {
+	handler := newHandler()
+
+	request := httptest.NewRequest(http.MethodGet, "/static/site.css", nil)
+	response := httptest.NewRecorder()
+
+	handler.ServeHTTP(response, request)
+
+	if response.Code != http.StatusOK {
+		t.Fatalf("expected status 200, got %d", response.Code)
+	}
+
+	body := response.Body.String()
+
+	assertContains(t, body, "body")
 }
