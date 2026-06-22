@@ -28,6 +28,7 @@ func TestHomePage(t *testing.T) {
 	assertContains(t, body, "Posts")
 	assertContains(t, body, "Sixteenth Attempt")
 	assertContains(t, body, `href="/sixteenth-attempt"`)
+	assertContains(t, body, `href="/now"`)
 }
 
 func TestSixteenthAttemptPost(t *testing.T) {
@@ -45,6 +46,24 @@ func TestSixteenthAttemptPost(t *testing.T) {
 	body := response.Body.String()
 
 	assertContains(t, body, "Sixteenth Attempt")
+}
+
+func TestNowPage(t *testing.T) {
+	handler := newHandler()
+
+	request := httptest.NewRequest(http.MethodGet, "/now", nil)
+	response := httptest.NewRecorder()
+
+	handler.ServeHTTP(response, request)
+
+	if response.Code != http.StatusOK {
+		t.Fatalf("expected status 200, got %d", response.Code)
+	}
+
+	body := response.Body.String()
+
+	assertContains(t, body, "now")
+	assertContains(t, body, "Current focus goes here.")
 }
 
 func assertContains(t *testing.T, body string, want string) {

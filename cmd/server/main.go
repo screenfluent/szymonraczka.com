@@ -22,6 +22,7 @@ func newHandler() http.Handler {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /{$}", home)
+	mux.HandleFunc("GET /now", nowPage)
 	mux.HandleFunc("GET /sixteenth-attempt", sixteenthAttemptPost)
 
 	return mux
@@ -48,6 +49,15 @@ func home(w http.ResponseWriter, r *http.Request) {
                 <li>
                    <a href="/">This Website</a>
                    <time>June 2026</time>
+                </li>
+             </ul>
+          </section>
+
+          <section>
+             <h2>Pages</h2>
+             <ul>
+                <li>
+                   <a href="/now">Now</a>
                 </li>
              </ul>
           </section>
@@ -82,4 +92,24 @@ func sixteenthAttemptPost(w http.ResponseWriter, r *http.Request) {
        </main>
     </body>
     </html>`)
+}
+
+func nowPage(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
+	io.WriteString(w, `<!doctype html>
+        <html lang="en">
+        <head>
+           <meta charset="utf-8">
+           <title>now</title>
+        </head>
+        <body>
+           <main>
+              <article>
+                 <h1>now</h1>
+                 <p>Current focus goes here.</p>
+              </article>
+           </main>
+        </body>
+        </html>`)
 }
