@@ -35,9 +35,13 @@ func home(w http.ResponseWriter, r *http.Request) {
     <html lang="en">
     <head>
        <meta charset="utf-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1">
        <title>Szymon Raczka</title>
     </head>
     <body>
+       <header>
+          <a href="/">Szymon Raczka</a>
+       </header>
        <main>
           <p>hello, nice to see you here.</p>
 
@@ -82,9 +86,13 @@ func sixteenthAttemptPost(w http.ResponseWriter, r *http.Request) {
     <html lang="en">
     <head>
        <meta charset="utf-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1">
        <title>Sixteenth Attempt</title>
     </head>
     <body>
+       <header>
+          <a href="/">Szymon Raczka</a>
+       </header>
        <main>
           <article>
              <h1>Sixteenth Attempt</h1>
@@ -101,9 +109,13 @@ func nowPage(w http.ResponseWriter, r *http.Request) {
         <html lang="en">
         <head>
            <meta charset="utf-8">
+           <meta name="viewport" content="width=device-width, initial-scale=1">
            <title>now</title>
         </head>
         <body>
+           <header>
+              <a href="/">Szymon Raczka</a>
+           </header>
            <main>
               <article>
                  <h1>now</h1>
