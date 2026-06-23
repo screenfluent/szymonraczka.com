@@ -23,11 +23,10 @@ func TestHomePage(t *testing.T) {
 
 	assertContains(t, body, "Szymon Rączka")
 	assertContains(t, body, "Projects")
-	assertContains(t, body, "This Website")
+	assertContains(t, body, "szymonraczka.com")
 	assertContains(t, body, "June 2026")
 	assertContains(t, body, "Posts")
-	assertContains(t, body, "Sixteenth Attempt")
-	assertContains(t, body, `href="/sixteenth-attempt"`)
+	assertContains(t, body, "First post coming soon")
 	assertContains(t, body, `href="/now"`)
 	assertContains(t, body, `href="/about"`)
 }
@@ -63,8 +62,8 @@ func TestNowPage(t *testing.T) {
 
 	body := response.Body.String()
 
-	assertContains(t, body, "now")
-	assertContains(t, body, "Current focus goes here.")
+	assertContains(t, body, "Now")
+	assertContains(t, body, "I am learning Go by building")
 }
 
 func TestAboutPage(t *testing.T) {

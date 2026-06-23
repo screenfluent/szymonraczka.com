@@ -29,7 +29,7 @@ var pageTemplate = template.Must(template.New("page").Parse(`<!doctype html>
     </head>
     <body>
        <header>
-          <a href="/">Szymon Raczka</a>
+          <a href="/">Szymon Rączka</a>
        </header>
        <main>
           {{.Body}}
@@ -85,29 +85,26 @@ func home(w http.ResponseWriter, r *http.Request) {
 	renderPage(w, pageData{
 		Title: "Home - szymonraczka.com",
 		Body: template.HTML(`<section>
-           <p>Hey, I'm Szymon Rączka.</p>
+   <p>Hey, I'm Szymon Rączka.</p>
 
-           <h1>I build small software projects and write about learning in public.</h1>
+   <h1>This is my personal website.</h1>
 
-           <p>
-              This site is my little corner of the internet where I connect my work, my experiments, and the lessons I learn while rebuilding my life after burnout.
-           </p>
+   <p>
+      I am building my online home: a place for notes, web projects, experiments, and things I learn along the way.
+   </p>
 
-           <p>
-              A decade ago, I had what looked like a dream life to many people. Then everything turned upside down: I went from hundreds of millions of views on YouTube to a collapse of my physical and mental health.
-           </p>
-
-           <p>
-              Right now I am building this simple Go website, learning the fundamentals by doing, and slowly turning that knowledge into notes, essays, and other projects. Follow along.
-           </p>
-        </section>
+   <p>
+      Right now I am keeping it simple. This website is built in Go and will grow slowly as I write, build, and publish more.
+   </p>
+</section>
 
         <section>
            <h2>Projects</h2>
            <ul>
               <li>
-                 <a href="/">This Website</a>
+                 <a href="/">szymonraczka.com</a>
                  <time>June 2026</time>
+                 <p>A tiny Go website coded by hand from scratch as a learning project.</p>
               </li>
            </ul>
         </section>
@@ -128,7 +125,7 @@ func home(w http.ResponseWriter, r *http.Request) {
            <h2>Posts</h2>
            <ul>
               <li>
-                 <a href="/sixteenth-attempt">Sixteenth Attempt</a>
+                 <p>First post coming soon</p>
               </li>
            </ul>
         </section>`),
@@ -146,20 +143,39 @@ func sixteenthAttemptPost(w http.ResponseWriter, r *http.Request) {
 
 func nowPage(w http.ResponseWriter, r *http.Request) {
 	renderPage(w, pageData{
-		Title: "now",
+		Title: "Now - szymonraczka.com",
 		Body: template.HTML(`<article>
-       <h1>now</h1>
-       <p>Current focus goes here.</p>
-    </article>`),
+   <h1>Now</h1>
+
+   <p>
+      I am learning Go by building this website from scratch.
+   </p>
+
+   <p>
+      I use AI as a teacher and reviewer, but I type the code myself so I actually understand what I am building.
+   </p>
+
+   <p>
+      My current focus is small software, clear writing, and rebuilding a slower, more sustainable creative practice.
+   </p>
+</article>`),
 	})
 }
 
 func aboutPage(w http.ResponseWriter, r *http.Request) {
 	renderPage(w, pageData{
-		Title: "About",
+		Title: "About - szymonraczka.com",
 		Body: template.HTML(`<article>
        <h1>About Me</h1>
-       <p>Something about me.</p>
+       <p>
+          I'm Szymon Rączka. I make small web projects and write about learning,
+          rebuilding, and making things on the internet.
+       </p>
+
+       <p>
+          In the past I created Handimania, a media project that reached more than 165 million YouTube views. These days I am focused on quieter, smaller, more sustainable work.
+       </p>
+
     </article>`),
 	})
 }
