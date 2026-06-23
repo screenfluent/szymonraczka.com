@@ -22,6 +22,10 @@ var pageTemplate = template.Must(template.New("page").Parse(`<!doctype html>
        <meta name="viewport" content="width=device-width, initial-scale=1">
        <link rel="stylesheet" href="/static/site.css">
        <title>{{.Title}}</title>
+       <script
+        defer
+        src="https://assets.onedollarstats.com/stonks.js"
+       ></script>
     </head>
     <body>
        <header>
