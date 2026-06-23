@@ -70,6 +70,7 @@ func newHandler() http.Handler {
 	mux.Handle("GET /static/", http.StripPrefix("/static/", fileServer))
 
 	mux.HandleFunc("GET /{$}", home)
+	mux.HandleFunc("GET /about", aboutPage)
 	mux.HandleFunc("GET /now", nowPage)
 	mux.HandleFunc("GET /sixteenth-attempt", sixteenthAttemptPost)
 
@@ -111,6 +112,9 @@ func home(w http.ResponseWriter, r *http.Request) {
            <h2>Pages</h2>
            <ul>
               <li>
+                 <a href="/about">About</a>
+              </li>
+              <li>
                  <a href="/now">Now</a>
               </li>
            </ul>
@@ -142,6 +146,16 @@ func nowPage(w http.ResponseWriter, r *http.Request) {
 		Body: template.HTML(`<article>
        <h1>now</h1>
        <p>Current focus goes here.</p>
+    </article>`),
+	})
+}
+
+func aboutPage(w http.ResponseWriter, r *http.Request) {
+	renderPage(w, pageData{
+		Title: "About",
+		Body: template.HTML(`<article>
+       <h1>About Me</h1>
+       <p>Something about me.</p>
     </article>`),
 	})
 }

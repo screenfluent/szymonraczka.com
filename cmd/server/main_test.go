@@ -29,6 +29,7 @@ func TestHomePage(t *testing.T) {
 	assertContains(t, body, "Sixteenth Attempt")
 	assertContains(t, body, `href="/sixteenth-attempt"`)
 	assertContains(t, body, `href="/now"`)
+	assertContains(t, body, `href="/about"`)
 }
 
 func TestSixteenthAttemptPost(t *testing.T) {
@@ -66,6 +67,24 @@ func TestNowPage(t *testing.T) {
 	assertContains(t, body, "Current focus goes here.")
 }
 
+func TestAboutPage(t *testing.T) {
+	handler := newHandler()
+
+	request := httptest.NewRequest(http.MethodGet, "/about", nil)
+	response := httptest.NewRecorder()
+
+	handler.ServeHTTP(response, request)
+
+	if response.Code != http.StatusOK {
+		t.Fatalf("expected status 200, got %d", response.Code)
+	}
+
+	body := response.Body.String()
+
+	assertContains(t, body, "about")
+	assertContains(t, body, "About Me")
+}
+
 func assertContains(t *testing.T, body string, want string) {
 	t.Helper()
 
@@ -77,7 +96,7 @@ func assertContains(t *testing.T, body string, want string) {
 func TestPublicPagesUseSharedShell(t *testing.T) {
 	handler := newHandler()
 
-	paths := []string{"/", "/sixteenth-attempt", "/now"}
+	paths := []string{"/", "/sixteenth-attempt", "/now", "/about"}
 
 	for _, path := range paths {
 		t.Run(path, func(t *testing.T) {
