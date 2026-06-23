@@ -79,37 +79,51 @@ func newHandler() http.Handler {
 func home(w http.ResponseWriter, r *http.Request) {
 	renderPage(w, pageData{
 		Title: "Home - szymonraczka.com",
-		Body: template.HTML(`<p>hello, nice to see you here.</p>
+		Body: template.HTML(`<section>
+           <p>Hey, I'm Szymon Rączka.</p>
 
-          <h1>I am Szymon</h1>
+           <h1>I build small software projects and write about learning in public.</h1>
 
-          <section>
-             <h2>Projects</h2>
-             <ul>
-                <li>
-                   <a href="/">This Website</a>
-                   <time>June 2026</time>
-                </li>
-             </ul>
-          </section>
+           <p>
+              This site is my little corner of the internet where I connect my work, my experiments, and the lessons I learn while rebuilding my life after burnout.
+           </p>
 
-          <section>
-             <h2>Pages</h2>
-             <ul>
-                <li>
-                   <a href="/now">Now</a>
-                </li>
-             </ul>
-          </section>
+           <p>
+              A decade ago, I had what looked like a dream life to many people. Then everything turned upside down: I went from hundreds of millions of views on YouTube to a collapse of my physical and mental health.
+           </p>
 
-          <section>
-             <h2>Posts</h2>
-             <ul>
-                <li>
-                   <a href="/sixteenth-attempt">Sixteenth Attempt</a>
-                </li>
-             </ul>
-          </section>`),
+           <p>
+              Right now I am building this simple Go website, learning the fundamentals by doing, and slowly turning that knowledge into notes, essays, and other projects. Follow along.
+           </p>
+        </section>
+
+        <section>
+           <h2>Projects</h2>
+           <ul>
+              <li>
+                 <a href="/">This Website</a>
+                 <time>June 2026</time>
+              </li>
+           </ul>
+        </section>
+
+        <section>
+           <h2>Pages</h2>
+           <ul>
+              <li>
+                 <a href="/now">Now</a>
+              </li>
+           </ul>
+        </section>
+
+        <section>
+           <h2>Posts</h2>
+           <ul>
+              <li>
+                 <a href="/sixteenth-attempt">Sixteenth Attempt</a>
+              </li>
+           </ul>
+        </section>`),
 	})
 }
 

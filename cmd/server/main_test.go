@@ -21,7 +21,7 @@ func TestHomePage(t *testing.T) {
 
 	body := response.Body.String()
 
-	assertContains(t, body, "I am Szymon")
+	assertContains(t, body, "Szymon Rączka")
 	assertContains(t, body, "Projects")
 	assertContains(t, body, "This Website")
 	assertContains(t, body, "June 2026")
