@@ -14,6 +14,12 @@ Prefer small behavior slices, simple Go, clear names, and explicit verification.
 Go. Simple monolith. Standard library first. SQLite only when persistence is needed.
 Few layers. Few interfaces. Behavior tests where they matter. No speculative architecture.
 
+## Roadmap discipline
+
+Read `ROADMAP.md` at the start of each session and follow it as the current product/process guide.
+If `ROADMAP.md` conflicts with older generated code or stale ideas, prefer the roadmap unless the user decides otherwise.
+Keep work publish-first: small slices, visible progress, minimal architecture, and learning notes that can become site content.
+
 ## Modes
 
 Teach mode:
