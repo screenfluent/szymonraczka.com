@@ -1,7 +1,7 @@
 package main
 
 import (
-	"io"
+	"html/template"
 	"io/fs"
 	"log"
 	"net/http"
@@ -9,6 +9,38 @@ import (
 
 	"szymonraczka.com/web"
 )
+
+type pageData struct {
+	Title string
+	Body  template.HTML
+}
+
+var pageTemplate = template.Must(template.New("page").Parse(`<!doctype html>
+    <html lang="en">
+    <head>
+       <meta charset="utf-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1">
+       <link rel="stylesheet" href="/static/site.css">
+       <title>{{.Title}}</title>
+    </head>
+    <body>
+       <header>
+          <a href="/">Szymon Raczka</a>
+       </header>
+       <main>
+          {{.Body}}
+       </main>
+    </body>
+    </html>`))
+
+func renderPage(w http.ResponseWriter, data pageData) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
+	err := pageTemplate.Execute(w, data)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	}
+}
 
 func main() {
 	server := &http.Server{
@@ -23,7 +55,6 @@ func main() {
 
 func newHandler() http.Handler {
 	mux := http.NewServeMux()
-
 
 	// Wyciągamy zawartość wbudowanego folderu web/static,
 	// żeby fileServer traktował ten folder jako swój główny (root).
@@ -46,22 +77,9 @@ func newHandler() http.Handler {
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-
-	io.WriteString(w, `<!doctype html>
-    <html lang="en">
-    <head>
-       <meta charset="utf-8">
-       <meta name="viewport" content="width=device-width, initial-scale=1">
-       <link rel="stylesheet" href="/static/site.css">
-       <title>Szymon Raczka</title>
-    </head>
-    <body>
-       <header>
-          <a href="/">Szymon Raczka</a>
-       </header>
-       <main>
-          <p>hello, nice to see you here.</p>
+	renderPage(w, pageData{
+		Title: "Home - szymonraczka.com",
+		Body: template.HTML(`<p>hello, nice to see you here.</p>
 
           <h1>I am Szymon</h1>
 
@@ -91,57 +109,25 @@ func home(w http.ResponseWriter, r *http.Request) {
                    <a href="/sixteenth-attempt">Sixteenth Attempt</a>
                 </li>
              </ul>
-          </section>
-       </main>
-    </body>
-    </html>`)
+          </section>`),
+	})
 }
 
 func sixteenthAttemptPost(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-
-	io.WriteString(w, `<!doctype html>
-    <html lang="en">
-    <head>
-       <meta charset="utf-8">
-       <meta name="viewport" content="width=device-width, initial-scale=1">
-       <link rel="stylesheet" href="/static/site.css">
-       <title>Sixteenth Attempt</title>
-    </head>
-    <body>
-       <header>
-          <a href="/">Szymon Raczka</a>
-       </header>
-       <main>
-          <article>
-             <h1>Sixteenth Attempt</h1>
-          </article>
-       </main>
-    </body>
-    </html>`)
+	renderPage(w, pageData{
+		Title: "Sixteenth Attempt",
+		Body: template.HTML(`<article>
+       <h1>Sixteenth Attempt</h1>
+    </article>`),
+	})
 }
 
 func nowPage(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-
-	io.WriteString(w, `<!doctype html>
-        <html lang="en">
-        <head>
-           <meta charset="utf-8">
-           <meta name="viewport" content="width=device-width, initial-scale=1">
-           <link rel="stylesheet" href="/static/site.css">
-           <title>now</title>
-        </head>
-        <body>
-           <header>
-              <a href="/">Szymon Raczka</a>
-           </header>
-           <main>
-              <article>
-                 <h1>now</h1>
-                 <p>Current focus goes here.</p>
-              </article>
-           </main>
-        </body>
-        </html>`)
+	renderPage(w, pageData{
+		Title: "now",
+		Body: template.HTML(`<article>
+       <h1>now</h1>
+       <p>Current focus goes here.</p>
+    </article>`),
+	})
 }
